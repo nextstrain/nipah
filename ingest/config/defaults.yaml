@@ -58,3 +58,5 @@ curate:
     - sra_accessions
     - abbr_authors
     - institution
+    - submitter_country
+    - sample_type
