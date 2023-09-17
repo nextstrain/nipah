@@ -9,4 +9,4 @@ include: "rules/curate.smk"
 rule all:
     input:
         "results/sequences.fasta",
-        "results/subset_metadata.tsv",
+        "results/metadata.tsv",

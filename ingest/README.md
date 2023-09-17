@@ -7,6 +7,19 @@ If you have another data source or private data that needs to be formatted for
 the phylogenetic workflow, then you can use a similar workflow to curate your
 own data.
 
+## Run
+
+Run the workflow with:
+
+```bash
+snakemake
+```
+
+This produces a directory called `results` with the following files:
+
+- `sequences.fasta` - sequences in FASTA format
+- `metadata.tsv` - metadata in TSV format
+
 ## Config
 
 The config directory contains all of the default configurations for the ingest workflow.
