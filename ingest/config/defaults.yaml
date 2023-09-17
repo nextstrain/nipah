@@ -8,7 +8,7 @@
 entrez_search_term: ""
 
 # Required to fetch from NCBI Datasets
-ncbi_taxon_id: ""
+ncbi_taxon_id: "3052225"
 
 # Optional fields to add to the NCBI Datasets output
 ncbi_dataset_fields: []
