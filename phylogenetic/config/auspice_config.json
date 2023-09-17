@@ -1,0 +1,77 @@
+{
+  "title": "Genomic epidemiology of Nipah",
+  "maintainers": [
+    {"name": "Cornelius Roemer", "url": "http://neherlab.org"}
+  ],
+  "data_provenance": [
+    {
+      "name": "GenBank",
+      "url": "https://www.ncbi.nlm.nih.gov/genbank/"
+    }
+  ],
+  "build_url": "https://github.com/corneliusroemer/nipah",
+  "colorings": [
+    {
+      "key": "region",
+      "title": "Region",
+      "type": "categorical"
+    },
+    {
+      "key": "country",
+      "title": "Country",
+      "type": "categorical"
+    },
+    {
+      "key": "division",
+      "title": "Division",
+      "type": "categorical"
+    },
+    {
+      "key": "host",
+      "title": "Host",
+      "type": "categorical"
+    },
+    {
+      "key": "date_released",
+      "title": "Release Date",
+      "type": "categorical"
+    },
+    {
+      "key": "date",
+      "title": "Collection date",
+      "type": "categorical"
+    },
+    {
+      "key": "institution",
+      "title": "Submitting Institution",
+      "type": "categorical"
+    },
+    {
+      "key": "sample_type",
+      "title": "Sample type",
+      "type": "categorical"
+    },
+    {
+      "key": "submitter_country",
+      "title": "Submitter country",
+      "type": "categorical"
+    }
+  ],
+  "geo_resolutions": [
+    "country", "region", "division"
+  ],
+  "display_defaults": {
+    "color_by": "country",
+    "map_triplicate": true,
+    "distance_measure": "div",
+    "transmission_lines": false
+  },
+  "filters": [
+    "country",
+    "region",
+    "host",
+    "authors_abbr",
+    "institution",
+    "submitter_country"
+  ]
+}
