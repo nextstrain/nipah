@@ -1,0 +1,14 @@
+clade	gene	site	alt
+I	nuc	3520	G
+I	nuc	6830	T
+
+Ia	clade	I
+Ia	nuc	8531	C
+Ia	nuc	11396	C
+
+Ib	clade	I
+Ib	nuc	6696	T
+Ib	nuc	13256	G
+
+II	nuc	3520	T
+II	nuc	6830	A

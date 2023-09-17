@@ -86,11 +86,11 @@ FEATURES             Location/Qualifiers
                      SISSLANSVPSSSVSTSGGTRLTNSLLNLRSRLAAKAAKEAASSNATDDPAISNRTQG
                      ESEKKNNQDLKPAQNDLDFVRADV"
      gene            2301..5004
-                     /locus_tag="Nvgp2"
-                     /note="P/V/C"
+                     /locus_tag="P"
+                     /note="P"
                      /db_xref="GeneID:920952"
      CDS             2406..4535
-                     /locus_tag="Nvgp2"
+                     /locus_tag="P"
                      /codon_start=1
                      /product="P phosphoprotein"
                      /protein_id="NP_112022.1"
