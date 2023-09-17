@@ -18,45 +18,6 @@ to the other approaches.
     - Example is written for viral data, please see offical NCBI Datasets docs for other genomes
 """
 
-###########################################################################
-########################## 1. Fetch from Entrez ###########################
-###########################################################################
-
-
-rule fetch_from_ncbi_entrez:
-    params:
-        term=config["entrez_search_term"],
-    output:
-        genbank="data/genbank.gb",
-    # Allow retries in case of network errors
-    retries: 5
-    benchmark:
-        "benchmarks/fetch_from_ncbi_entrez.txt"
-    shell:
-        """
-        vendored/fetch-from-ncbi-entrez \
-            --term {params.term:q} \
-            --output {output.genbank}
-        """
-
-
-rule parse_genbank_to_ndjson:
-    input:
-        genbank="data/genbank.gb",
-    output:
-        ndjson="data/ncbi.ndjson",
-    benchmark:
-        "benchmarks/parse_genbank_to_ndjson.txt"
-    shell:
-        """
-        # Add in custom script to parse needed fields from GenBank file to NDJSON file
-        """
-
-
-###########################################################################
-####################### 2. Fetch from NCBI Datasets #######################
-###########################################################################
-
 
 rule fetch_ncbi_dataset_package:
     params:
