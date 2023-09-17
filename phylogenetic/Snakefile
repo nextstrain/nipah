@@ -9,6 +9,10 @@ rule build:
 genes = ["N", "M", "F", "G", "L", "P"]
 
 
+wildcard_constraints:
+    build="human|I|II|all",
+
+
 rule get_metadata:
     input:
         metadata="../ingest/results/metadata.tsv",
@@ -266,8 +270,8 @@ rule export:
 
 rule deploy:
     input:
-        "auspice/nipah.json",
-        "auspice/nipah_root-sequence.json",
+        "auspice/nipah_all.json",
+        "auspice/nipah_all_root-sequence.json",
     shell:
         """
         nextstrain remote upload nextstrain.org/groups/neherlab/staging/nipah {input} 2>&1

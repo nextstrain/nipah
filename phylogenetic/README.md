@@ -3,6 +3,10 @@
 This workflow uses metadata and sequences to produce one or multiple [Nextstrain datasets][]
 that can be visualized in Auspice.
 
+## Background
+
+See e.g. [Whitmer et. al, 2020](https://academic.oup.com/ve/article/7/1/veaa062/5894561)
+
 ## Data Requirements
 
 The core phylogenetic workflow will use metadata values as-is, so please do any
