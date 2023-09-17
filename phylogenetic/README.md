@@ -3,6 +3,8 @@
 This workflow uses metadata and sequences to produce one or multiple [Nextstrain datasets][]
 that can be visualized in Auspice.
 
+Resulting tree is available here: https://nextstrain.org/groups/neherlab/staging/nipah
+
 ## Background
 
 See e.g. [Whitmer et. al, 2020](https://academic.oup.com/ve/article/7/1/veaa062/5894561)
