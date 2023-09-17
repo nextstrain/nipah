@@ -2,5 +2,11 @@
 configfile: "config/defaults.yaml"
 
 
-include: "rules/fetch-from-ncbi.smk"
+include: "rules/fetch_from_ncbi.smk"
 include: "rules/curate.smk"
+
+
+rule all:
+    input:
+        "results/sequences.fasta",
+        "results/subset_metadata.tsv",
