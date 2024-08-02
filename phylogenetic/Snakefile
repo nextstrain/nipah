@@ -22,49 +22,7 @@ rule all:
 # These rules are imported in the order that they are expected to run.
 include: "rules/prepare_sequences.smk"
 include: "rules/construct_phylogeny.smk"
-
-rule ancestral:
-    input:
-        tree="builds/{build}/tree.nwk",
-        alignment="builds/{build}/premask.fasta",
-        annotation=config["ancestral"]["reference_gb"],
-    output:
-        node_data="builds/{build}/muts.json",
-    params:
-        inference="joint",
-        translations="builds/{build}/translations/gene.%GENE.fasta",
-        genes=" ".join(genes),
-    shell:
-        """
-        augur ancestral \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --output-node-data {output.node_data} \
-            --inference {params.inference} \
-            --genes {params.genes} \
-            --annotation {input.annotation} \
-            --translations {params.translations} \
-            --root-sequence {input.annotation} \
-            2>&1 | tee {log}
-        """
-
-
-rule clades:
-    input:
-        tree="builds/{build}/tree.nwk",
-        node_data="builds/{build}/muts.json",
-        clades=config["clades"]["clades_defining_mutations"],
-    output:
-        clades="builds/{build}/clades.json",
-    shell:
-        """
-        augur clades \
-            --tree {input.tree} \
-            --mutations {input.node_data} \
-            --clades {input.clades} \
-            --output-node-data {output.clades}
-        """
-
+include: "rules/annotate_phylogeny.smk"
 
 rule export:
     input:
