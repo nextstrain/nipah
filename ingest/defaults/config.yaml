@@ -33,6 +33,8 @@ curate:
     Submitter Country: submitter_country
   date_fields: ['date', 'date_released', 'date_updated']
   expected_date_formats: ['%Y', '%Y-%m', '%Y-%m-%d', '%Y-%m-%dT%H:%M:%SZ']
+  # The expected field that contains the GenBank geo_loc_name
+  genbank_location_field: location
   titlecase:
     abbreviations: ['USA']
     articles: ['and', 'd', 'de', 'del', 'des', 'di', 'do', 'en', 'l', 'la', 'las', 'le', 'los', 'nad', 'of', 'op', 'sur', 'the', 'y']
