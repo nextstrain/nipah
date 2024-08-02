@@ -25,6 +25,20 @@ This part of the workflow usually includes the following steps:
 See Augur's usage docs for these commands for more details.
 """
 
+rule download_lat_longs:
+    output:
+        "builds/lat_longs.tsv",
+    params:
+        url="https://raw.githubusercontent.com/nextstrain/ncov/master/defaults/lat_longs.tsv",
+    shell:
+        """
+        curl {params.url} | \
+        sed "s/North Rhine Westphalia/North Rhine-Westphalia/g" | \
+        sed "s/Baden-Wuerttemberg/Baden-Wurttemberg/g" \
+        > {output}
+        """
+
+
 rule export:
     input:
         tree="builds/{build}/tree.nwk",
