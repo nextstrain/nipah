@@ -56,6 +56,7 @@ curate:
     - country
     - division
     - location
+    - length
     - host
     - sra_accessions
     - abbr_authors
