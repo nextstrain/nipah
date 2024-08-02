@@ -5,6 +5,9 @@ workflow and defines its default output(s).
 # The workflow filepaths are written relative to this Snakefile's base directory
 workdir: workflow.current_basedir
 
+# Use default configuration values. Override with Snakemake's --configfile/--config options.
+configfile: "defaults/config.yaml"
+
 builds = ["human", "I", "II", "all"]
 genes = ["N", "M", "F", "G", "L", "P"]
 
@@ -64,38 +67,30 @@ rule download_lat_longs:
         > {output}
         """
 
-
-def exclude_where(w):
-    d = {
-        "human": "--exclude-where host!='Homo sapiens'",
-        "I": "--exclude-where country=Malaysia country=USA country=Cambodia country=''",
-        "II": "--exclude-where country=India country=Bangladesh country=Thailand",
-    }
-    return d.get(w["build"], "")
-
-
 rule filter:
     input:
         sequences="data/sequences.fasta",
         metadata="data/metadata.tsv",
-        exclude="defaults/exclude.txt",
+        exclude=config["filter"]["exclude"],
         index="data/sequences.index",
     output:
         sequences="builds/{build}/sequences.fasta",
         metadata="builds/{build}/metadata.tsv",
     params:
-        exclude_where=lambda w: exclude_where(w),
+        metadata_id_columns=config["strain_id_field"],
+        min_length=config["filter"]["min_length"],
+        exclude_where=lambda wildcard: config['filter']['exclude_where'][wildcard.build],
     shell:
         """
         augur filter \
             --sequences {input.sequences} \
             --metadata {input.metadata} \
+            --metadata-id-columns {params.metadata_id_columns} \
             --exclude {input.exclude} \
             --sequence-index {input.index} \
-            --min-length 17000 \
+            --min-length {params.min_length} \
             {params.exclude_where} \
             --output {output.sequences} \
-            --metadata-id-columns accession \
             --output-metadata {output.metadata}
         """
 
@@ -103,8 +98,8 @@ rule filter:
 rule nextalign_before_mask:
     input:
         fasta="builds/{build}/sequences.fasta",
-        reference="defaults/reference.fasta",
-        genemap="defaults/genemap.gff",
+        reference=config["nextalign"]["reference_fasta"],
+        genemap=config["nextalign"]["genemap"],
     output:
         alignment="builds/{build}/premask.fasta",
     shell:
@@ -136,8 +131,8 @@ rule mask:
 rule nextalign_after_mask:
     input:
         fasta="builds/{build}/masked.fasta",
-        reference="defaults/reference.fasta",
-        genemap="defaults/genemap.gff",
+        reference=config["nextalign"]["reference_fasta"],
+        genemap=config["nextalign"]["genemap"],
     output:
         alignment="builds/{build}/aligned.fasta",
     params:
@@ -161,7 +156,7 @@ rule tree:
     output:
         tree="builds/{build}/tree_raw.nwk",
     params:
-        args="'-ninit 10 -n 4 -czb -T AUTO'",
+        args=config["tree"]["args"],
     shell:
         """
         augur tree \
@@ -180,17 +175,18 @@ rule refine:
         tree="builds/{build}/tree.nwk",
         node_data="builds/{build}/branch_lengths.json",
     params:
-        coalescent="opt",
-        date_inference="marginal",
-        clock_filter_iqd=0,
-        clock_rate = 0.000155, #estimated from auspice/nipah_human.json and auspice/nipah_I.json rate estimates
+        metadata_id_columns=config["strain_id_field"],
+        coalescent=config["refine"]["coalescent"],
+        date_inference=config["refine"]["date_inference"],
+        clock_filter_iqd=config["refine"]["clock_filter_iqd"],
+        clock_rate =config["refine"]["clock_rate"],
     shell:
         """
         augur refine \
             --tree {input.tree} \
             --alignment {input.alignment} \
             --metadata {input.metadata} \
-            --metadata-id-columns accession \
+            --metadata-id-columns {params.metadata_id_columns} \
             --output-tree {output.tree} \
             --timetree \
             --precision 3 \
@@ -208,7 +204,7 @@ rule ancestral:
     input:
         tree="builds/{build}/tree.nwk",
         alignment="builds/{build}/premask.fasta",
-        annotation="defaults/reference.gb",
+        annotation=config["ancestral"]["reference_gb"],
     output:
         node_data="builds/{build}/muts.json",
     params:
@@ -234,7 +230,7 @@ rule clades:
     input:
         tree="builds/{build}/tree.nwk",
         node_data="builds/{build}/muts.json",
-        clades="defaults/clades.tsv",
+        clades=config["clades"]["clades_defining_mutations"],
     output:
         clades="builds/{build}/clades.json",
     shell:
@@ -253,7 +249,7 @@ rule export:
         node_data="builds/{build}/branch_lengths.json",
         clades="builds/{build}/clades.json",
         ancestral="builds/{build}/muts.json",
-        auspice_config="defaults/auspice_config.json",
+        auspice_config=config["export"]["auspice_config"],
         lat_longs=rules.download_lat_longs.output,
         metadata="builds/{build}/metadata.tsv",
     output:
