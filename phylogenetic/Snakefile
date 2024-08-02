@@ -187,6 +187,7 @@ rule refine:
         coalescent="opt",
         date_inference="marginal",
         clock_filter_iqd=0,
+        clock_rate = 0.000155, #estimated from auspice/nipah_human.json and auspice/nipah_I.json rate estimates
     shell:
         """
         augur refine \
@@ -202,7 +203,8 @@ rule refine:
             --coalescent {params.coalescent} \
             --date-inference {params.date_inference} \
             --date-confidence \
-            --clock-filter-iqd {params.clock_filter_iqd}
+            --clock-filter-iqd {params.clock_filter_iqd} \
+            --clock-rate {params.clock_rate}
         """
 
 
