@@ -9,10 +9,10 @@ own data.
 
 ## Run
 
-Run the workflow with:
+The workflow can be run from the top level pathogen repo directory:
 
 ```bash
-snakemake
+nextstrain build ingest
 ```
 
 This produces a directory called `results` with the following files:
