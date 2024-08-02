@@ -20,11 +20,11 @@ This produces a directory called `results` with the following files:
 - `sequences.fasta` - sequences in FASTA format
 - `metadata.tsv` - metadata in TSV format
 
-## Config
+## Defaults
 
-The config directory contains all of the default configurations for the ingest workflow.
+The defaults directory contains all of the default configurations for the ingest workflow.
 
-[config/defaults.yaml](config/defaults.yaml) contains all of the default configuration parameters
+[defaults/config.yaml](defaults/config.yaml) contains all of the default configuration parameters
 used for the ingest workflow. Use Snakemake's `--configfile`/`--config`
 options to override these default values.
 

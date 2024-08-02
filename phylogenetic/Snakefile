@@ -78,7 +78,7 @@ rule filter:
     input:
         sequences="data/sequences.fasta",
         metadata="data/metadata.tsv",
-        exclude="config/exclude.txt",
+        exclude="defaults/exclude.txt",
         index="data/sequences.index",
     output:
         sequences="builds/{build}/sequences.fasta",
@@ -103,8 +103,8 @@ rule filter:
 rule nextalign_before_mask:
     input:
         fasta="builds/{build}/sequences.fasta",
-        reference="config/reference.fasta",
-        genemap="config/genemap.gff",
+        reference="defaults/reference.fasta",
+        genemap="defaults/genemap.gff",
     output:
         alignment="builds/{build}/premask.fasta",
     shell:
@@ -136,8 +136,8 @@ rule mask:
 rule nextalign_after_mask:
     input:
         fasta="builds/{build}/masked.fasta",
-        reference="config/reference.fasta",
-        genemap="config/genemap.gff",
+        reference="defaults/reference.fasta",
+        genemap="defaults/genemap.gff",
     output:
         alignment="builds/{build}/aligned.fasta",
     params:
@@ -208,7 +208,7 @@ rule ancestral:
     input:
         tree="builds/{build}/tree.nwk",
         alignment="builds/{build}/premask.fasta",
-        annotation="config/reference.gb",
+        annotation="defaults/reference.gb",
     output:
         node_data="builds/{build}/muts.json",
     params:
@@ -234,7 +234,7 @@ rule clades:
     input:
         tree="builds/{build}/tree.nwk",
         node_data="builds/{build}/muts.json",
-        clades="config/clades.tsv",
+        clades="defaults/clades.tsv",
     output:
         clades="builds/{build}/clades.json",
     shell:
@@ -253,7 +253,7 @@ rule export:
         node_data="builds/{build}/branch_lengths.json",
         clades="builds/{build}/clades.json",
         ancestral="builds/{build}/muts.json",
-        auspice_config="config/auspice_config.json",
+        auspice_config="defaults/auspice_config.json",
         lat_longs=rules.download_lat_longs.output,
         metadata="builds/{build}/metadata.tsv",
     output:

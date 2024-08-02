@@ -6,7 +6,7 @@ and defines its default outputs.
 workdir: workflow.current_basedir
 
 # Use default configuration values. Override with Snakemake's --configfile/--config options.
-configfile: "config/defaults.yaml"
+configfile: "defaults/config.yaml"
 
 
 include: "rules/fetch_from_ncbi.smk"
