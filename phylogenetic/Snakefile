@@ -5,20 +5,16 @@ workflow and defines its default output(s).
 # The workflow filepaths are written relative to this Snakefile's base directory
 workdir: workflow.current_basedir
 
-rule build:
-    input:
-        "auspice/nipah_all.json",
-        "auspice/nipah_human.json",
-        "auspice/nipah_I.json",
-        "auspice/nipah_II.json",
-
-
+builds = ["human", "I", "II", "all"]
 genes = ["N", "M", "F", "G", "L", "P"]
 
-
 wildcard_constraints:
-    build="human|I|II|all",
+    build="|".join(builds),
+    gene="|".join(genes)
 
+rule all:
+    input:
+        auspice_json = expand("auspice/nipah_{build}.json", build=builds),
 
 rule get_metadata:
     input:
