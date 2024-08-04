@@ -9,6 +9,23 @@ Resulting tree is available here: https://nextstrain.org/groups/neherlab/staging
 
 See e.g. [Whitmer et. al, 2020](https://academic.oup.com/ve/article/7/1/veaa062/5894561)
 
+## Workflow Usage
+
+The workflow can be run from the top level pathogen repo directory:
+```
+nextstrain build phylogenetic
+```
+
+Alternatively, the workflow can also be run from within the phylogenetic directory:
+```
+cd phylogenetic
+nextstrain build .
+```
+
+This produces the default outputs of the phylogenetic workflow:
+
+- auspice_json(s) = auspice/*.json
+
 ## Data Requirements
 
 The core phylogenetic workflow will use metadata values as-is, so please do any
@@ -30,7 +47,11 @@ options to override these default values.
 ## Snakefile and rules
 
 The rules directory contains separate Snakefiles (`*.smk`) as modules of the core phylogenetic workflow.
-The modules of the workflow are in separate files to keep the main ingest [Snakefile](Snakefile) succinct and organized.
+The modules of the workflow are in separate files to keep the main phylogenetic [Snakefile](Snakefile) succinct and organized.
+
+The `workdir` is hardcoded to be the phylogenetic directory so all filepaths for
+inputs/outputs should be relative to the phylogenetic directory.
+
 Modules are all [included](https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#includes)
 in the main Snakefile in the order that they are expected to run.
 
