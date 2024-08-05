@@ -13,7 +13,7 @@ ncbi_dataset_fields: []
 # Config parameters related to the curate pipeline
 curate:
   geolocation_rules_url: "https://raw.githubusercontent.com/nextstrain/ncov-ingest/master/source-data/gisaid_geoLocationRules.tsv"
-  local_geolocation_rules: "config/geolocation_rules.tsv"
+  local_geolocation_rules: "defaults/geolocation_rules.tsv"
   field_map:
     Source database: database
     Isolate Collection date: date
@@ -33,6 +33,8 @@ curate:
     Submitter Country: submitter_country
   date_fields: ['date', 'date_released', 'date_updated']
   expected_date_formats: ['%Y', '%Y-%m', '%Y-%m-%d', '%Y-%m-%dT%H:%M:%SZ']
+  # The expected field that contains the GenBank geo_loc_name
+  genbank_location_field: location
   titlecase:
     abbreviations: ['USA']
     articles: ['and', 'd', 'de', 'del', 'des', 'di', 'do', 'en', 'l', 'la', 'las', 'le', 'los', 'nad', 'of', 'op', 'sur', 'the', 'y']
@@ -40,7 +42,7 @@ curate:
   authors_field: 'authors'
   authors_default_value: '?'
   abbr_authors_field: 'abbr_authors'
-  annotations: "config/annotations.tsv"
+  annotations: "defaults/annotations.tsv"
   annotations_id: 'accession'
   output_id_field: "accession"
   output_sequence_field: "sequence"
@@ -54,6 +56,7 @@ curate:
     - country
     - division
     - location
+    - length
     - host
     - sra_accessions
     - abbr_authors

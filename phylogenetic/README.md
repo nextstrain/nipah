@@ -9,6 +9,23 @@ Resulting tree is available here: https://nextstrain.org/groups/neherlab/staging
 
 See e.g. [Whitmer et. al, 2020](https://academic.oup.com/ve/article/7/1/veaa062/5894561)
 
+## Workflow Usage
+
+The workflow can be run from the top level pathogen repo directory:
+```
+nextstrain build phylogenetic
+```
+
+Alternatively, the workflow can also be run from within the phylogenetic directory:
+```
+cd phylogenetic
+nextstrain build .
+```
+
+This produces the default outputs of the phylogenetic workflow:
+
+- auspice_json(s) = auspice/*.json
+
 ## Data Requirements
 
 The core phylogenetic workflow will use metadata values as-is, so please do any
@@ -19,18 +36,22 @@ desired data formatting and curations as part of the [ingest](../ingest/) workfl
 2. The `date` column in the metadata must be in ISO 8601 date format (i.e. YYYY-MM-DD).
 3. Ambiguous dates should be masked with `XX` (e.g. 2023-01-XX).
 
-## Config
+## Defaults
 
-The config directory contains all of the default configurations for the phylogenetic workflow.
+The defaults directory contains all of the default configurations for the phylogenetic workflow.
 
-[config/defaults.yaml](config/defaults.yaml) contains all of the default configuration parameters
+[defaults/config.yaml](defaults/config.yaml) contains all of the default configuration parameters
 used for the phylogenetic workflow. Use Snakemake's `--configfile`/`--config`
 options to override these default values.
 
 ## Snakefile and rules
 
 The rules directory contains separate Snakefiles (`*.smk`) as modules of the core phylogenetic workflow.
-The modules of the workflow are in separate files to keep the main ingest [Snakefile](Snakefile) succinct and organized.
+The modules of the workflow are in separate files to keep the main phylogenetic [Snakefile](Snakefile) succinct and organized.
+
+The `workdir` is hardcoded to be the phylogenetic directory so all filepaths for
+inputs/outputs should be relative to the phylogenetic directory.
+
 Modules are all [included](https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#includes)
 in the main Snakefile in the order that they are expected to run.
 

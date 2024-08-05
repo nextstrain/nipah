@@ -1,272 +1,29 @@
-rule build:
-    input:
-        "auspice/nipah_all.json",
-        "auspice/nipah_human.json",
-        "auspice/nipah_I.json",
-        "auspice/nipah_II.json",
+"""
+This is the main phylogenetic Snakefile that orchestrates the full phylogenetic
+workflow and defines its default output(s).
+"""
+# The workflow filepaths are written relative to this Snakefile's base directory
+workdir: workflow.current_basedir
 
+# Use default configuration values. Override with Snakemake's --configfile/--config options.
+configfile: "defaults/config.yaml"
 
+builds = ["human", "I", "II", "all"]
 genes = ["N", "M", "F", "G", "L", "P"]
 
-
 wildcard_constraints:
-    build="human|I|II|all",
+    build="|".join(builds),
+    gene="|".join(genes)
 
-
-rule get_metadata:
+rule all:
     input:
-        metadata="../ingest/results/metadata.tsv",
-    output:
-        metadata="data/metadata.tsv",
-    shell:
-        """
-        cp {input} {output}
-        """
+        auspice_json = expand("auspice/nipah_{build}.json", build=builds),
 
-
-rule get_sequences:
-    input:
-        sequences="../ingest/results/sequences.fasta",
-    output:
-        sequences="data/sequences.fasta",
-    shell:
-        """
-        cp {input} {output}
-        """
-
-
-rule index:
-    input:
-        "data/sequences.fasta",
-    output:
-        "data/sequences.index",
-    shell:
-        """
-        augur index \
-            --sequences {input} \
-            --output {output}
-        """
-
-
-rule download_lat_longs:
-    output:
-        "builds/lat_longs.tsv",
-    params:
-        url="https://raw.githubusercontent.com/nextstrain/ncov/master/defaults/lat_longs.tsv",
-    shell:
-        """
-        curl {params.url} | \
-        sed "s/North Rhine Westphalia/North Rhine-Westphalia/g" | \
-        sed "s/Baden-Wuerttemberg/Baden-Wurttemberg/g" \
-        > {output}
-        """
-
-
-def exclude_where(w):
-    d = {
-        "human": "--exclude-where host!='Homo sapiens'",
-        "I": "--exclude-where country=Malaysia country=USA country=Cambodia country=''",
-        "II": "--exclude-where country=India country=Bangladesh country=Thailand",
-    }
-    return d.get(w["build"], "")
-
-
-rule filter:
-    input:
-        sequences="data/sequences.fasta",
-        metadata="data/metadata.tsv",
-        exclude="config/exclude.txt",
-        index="data/sequences.index",
-    output:
-        sequences="builds/{build}/sequences.fasta",
-        metadata="builds/{build}/metadata.tsv",
-    params:
-        exclude_where=lambda w: exclude_where(w),
-    shell:
-        """
-        augur filter \
-            --sequences {input.sequences} \
-            --metadata {input.metadata} \
-            --exclude {input.exclude} \
-            --sequence-index {input.index} \
-            --min-length 17000 \
-            {params.exclude_where} \
-            --output {output.sequences} \
-            --metadata-id-columns accession \
-            --output-metadata {output.metadata}
-        """
-
-
-rule nextalign_before_mask:
-    input:
-        fasta="builds/{build}/sequences.fasta",
-        reference="config/reference.fasta",
-        genemap="config/genemap.gff",
-    output:
-        alignment="builds/{build}/premask.fasta",
-    shell:
-        """
-        nextalign run \
-            --input-ref {input.reference} \
-            --input-gene-map {input.genemap} \
-            --output-fasta {output.alignment} \
-            -- {input.fasta}
-        """
-
-
-rule mask:
-    input:
-        alignment="builds/{build}/premask.fasta",
-    output:
-        alignment="builds/{build}/masked.fasta",
-    shell:
-        """
-        python3 scripts/mask-alignment.py \
-            --alignment {input.alignment} \
-            --mask-from-beginning 100 \
-            --mask-from-end 100 \
-            --mask-terminal-gaps \
-            --output {output.alignment}
-        """
-
-
-rule nextalign_after_mask:
-    input:
-        fasta="builds/{build}/masked.fasta",
-        reference="config/reference.fasta",
-        genemap="config/genemap.gff",
-    output:
-        alignment="builds/{build}/aligned.fasta",
-    params:
-        template_string=lambda w: f"builds/{w.build}/translations/gene.{{gene}}.fasta",
-        genes=",".join(genes),
-    shell:
-        """
-        nextalign run \
-            --input-ref {input.reference} \
-            --input-gene-map {input.genemap} \
-            --genes {params.genes} \
-            --output-translations {params.template_string} \
-            --output-fasta {output.alignment} \
-            -- {input.fasta}
-        """
-
-
-rule tree:
-    input:
-        alignment="builds/{build}/aligned.fasta",
-    output:
-        tree="builds/{build}/tree_raw.nwk",
-    params:
-        args="'-ninit 10 -n 4 -czb -T AUTO'",
-    shell:
-        """
-        augur tree \
-            --alignment {input.alignment} \
-            --tree-builder-args {params.args} \
-            --output {output.tree}
-        """
-
-
-rule refine:
-    input:
-        tree="builds/{build}/tree_raw.nwk",
-        alignment="builds/{build}/masked.fasta",
-        metadata="builds/{build}/metadata.tsv",
-    output:
-        tree="builds/{build}/tree.nwk",
-        node_data="builds/{build}/branch_lengths.json",
-    params:
-        coalescent="opt",
-        date_inference="marginal",
-        clock_filter_iqd=0,
-    shell:
-        """
-        augur refine \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --metadata {input.metadata} \
-            --metadata-id-columns accession \
-            --output-tree {output.tree} \
-            --timetree \
-            --precision 3 \
-            --keep-polytomies \
-            --output-node-data {output.node_data} \
-            --coalescent {params.coalescent} \
-            --date-inference {params.date_inference} \
-            --date-confidence \
-            --clock-filter-iqd {params.clock_filter_iqd}
-        """
-
-
-rule ancestral:
-    input:
-        tree="builds/{build}/tree.nwk",
-        alignment="builds/{build}/premask.fasta",
-        annotation="config/reference.gb",
-    output:
-        node_data="builds/{build}/muts.json",
-    params:
-        inference="joint",
-        translations="builds/{build}/translations/gene.%GENE.fasta",
-        genes=" ".join(genes),
-    shell:
-        """
-        augur ancestral \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --output-node-data {output.node_data} \
-            --inference {params.inference} \
-            --genes {params.genes} \
-            --annotation {input.annotation} \
-            --translations {params.translations} \
-            --root-sequence {input.annotation} \
-            2>&1 | tee {log}
-        """
-
-
-rule clades:
-    input:
-        tree="builds/{build}/tree.nwk",
-        node_data="builds/{build}/muts.json",
-        clades="config/clades.tsv",
-    output:
-        clades="builds/{build}/clades.json",
-    shell:
-        """
-        augur clades \
-            --tree {input.tree} \
-            --mutations {input.node_data} \
-            --clades {input.clades} \
-            --output-node-data {output.clades}
-        """
-
-
-rule export:
-    input:
-        tree="builds/{build}/tree.nwk",
-        node_data="builds/{build}/branch_lengths.json",
-        clades="builds/{build}/clades.json",
-        ancestral="builds/{build}/muts.json",
-        auspice_config="config/auspice_config.json",
-        lat_longs=rules.download_lat_longs.output,
-        metadata="builds/{build}/metadata.tsv",
-    output:
-        auspice_json="auspice/nipah_{build}.json",
-        root_json="auspice/nipah_{build}_root-sequence.json",
-    shell:
-        """
-        augur export v2 \
-            --tree {input.tree} \
-            --node-data {input.node_data} {input.ancestral} {input.clades} \
-            --include-root-sequence \
-            --auspice-config {input.auspice_config} \
-            --lat-longs {input.lat_longs} \
-            --output {output.auspice_json} \
-            --metadata-id-columns accession \
-            --metadata {input.metadata}
-        """
-
+# These rules are imported in the order that they are expected to run.
+include: "rules/prepare_sequences.smk"
+include: "rules/construct_phylogeny.smk"
+include: "rules/annotate_phylogeny.smk"
+include: "rules/export.smk"
 
 rule deploy:
     input:

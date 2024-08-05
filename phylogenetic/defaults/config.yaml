@@ -1,0 +1,39 @@
+# This configuration file should contain all required configuration parameters
+# for the phylogenetic workflow to run to completion.
+#
+# Define optional config parameters with their default values here so that users
+# do not have to dig through the workflows to figure out the default values
+
+strain_id_field: "accession"
+
+filter:
+  exclude: "defaults/exclude.txt"
+  min_length: 17000
+  exclude_where:
+    human: "--exclude-where host!='Homo sapiens'"
+    I: "--exclude-where country=Malaysia country=USA country=Cambodia country=''"
+    II: "--exclude-where country=India country=Bangladesh country=Thailand"
+    all: ""
+
+nextalign:
+  reference_fasta: "defaults/reference.fasta"
+  genemap: "defaults/genemap.gff"
+
+tree:
+  args: "'-ninit 10 -n 4 -czb -T AUTO'"
+
+refine:
+  coalescent: "opt"
+  date_inference: "marginal"
+  clock_filter_iqd: 0
+  # Estimate clock_rate from auspice/nipah_human.json and auspice/nipah_I.json rate
+  clock_rate: 0.000155
+
+ancestral:
+  reference_gb: "defaults/reference.gb"
+
+clades:
+  clades_defining_mutations: "defaults/clades.tsv"
+
+export:
+  auspice_config: "defaults/auspice_config.json"
