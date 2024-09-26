@@ -1,0 +1,19 @@
+accession	strain	date	date_released	date_updated	region	country	division	location	length	host	sra_accessions	abbr_authors	institution	submitter_country	sample_type
+AF212302.2		XXXX-XX-XX	2000-06-01	2001-12-10					18246			Chua et al.	Centers for Disease Control and Prevention, Measles Virus Section	USA	
+AJ564621.1	NV/MY/99/VRI-2794	XXXX-XX-XX	2004-01-05	2023-07-14					18246			AbuBakar et al.	Abubakar S., Medical Microbiology, University Malaya, Faculty Of Medicine, 50603 Kuala Lumpur	Malaysia	
+AJ564622.1	NV/MY/99/VRI-1413	XXXX-XX-XX	2004-01-05	2023-07-14					18246			AbuBakar et al.	Abubakar S., Medical Microbiology, University Malaya, Faculty Of Medicine, 50603 Kuala Lumpur	Malaysia	
+AJ564623.1	NV/MY/99/UM-0128	XXXX-XX-XX	2004-01-05	2023-07-14					18246			AbuBakar et al.	Abubakar S., Medical Microbiology, University Malaya, Faculty Of Medicine, 50603 Kuala Lumpur	Malaysia	
+AJ627196.1	NV/MY/99/VRI-0626	XXXX-XX-XX	2005-01-07	2005-04-15	Asia	Malaysia			18246	Sus scrofa		AbuBakar et al.	Abubakar S., Medical Microbiology, University Malaya, Faculty of Medicine, 50603 Kuala Lumpur	Malaysia	
+AY029767.1	UMMC1	XXXX-XX-XX	2001-09-07	1900-01-01	Asia	Malaysia			18246			Chan et al.	University of Malaya, Department of Medical Microbiology	Malaysia	
+AY029768.1	UMMC2	XXXX-XX-XX	2001-09-07	1900-01-01	Asia	Malaysia			18246			Chan et al.	University of Malaya, Department of Medical Microbiology	Malaysia	
+AY988601.1		2004-XX-XX	2005-06-01	2005-09-26	Asia	Bangladesh			18252	Homo sapiens		Harcourt et al.	Centers for Disease Control and Prevention, Division of Viral and Rickettsial Diseases	USA	
+FJ513078.1	Ind-Nipah-07-FG	2007-XX-XX	2009-12-31	2011-05-02	Asia	India			18252	Homo sapiens		Arankalle et al.	National Institute of Virology, Hepatitis	India	lung
+JN808857.1	NIVBGD2008MANIKGONJ	2008-XX-XX	2012-02-04	2012-02-04	Asia	Bangladesh	Manikgonj		18252	Homo sapiens		Lo et al.	Centers for Disease Control and Prevention, Viral Special Pathogens Branch	USA	oronasopharynx
+JN808863.1	NIVBGD2008RAJBARI	2008-XX-XX	2012-02-04	2012-02-04	Asia	Bangladesh	Dhaka	Rajbari	18252	Homo sapiens		Lo et al.	Centers for Disease Control and Prevention, Viral Special Pathogens Branch	USA	oronasopharynx
+JN808864.1	NIVBGD2010FARIDPUR	2010-XX-XX	2012-02-04	2012-02-04	Asia	Bangladesh	Dhaka	Faridpur	18167	Homo sapiens		Lo et al.	Centers for Disease Control and Prevention, Viral Special Pathogens Branch	USA	oronasopharynx
+KY425646.1	IRF0160	1999-XX-XX	2017-01-15	2017-01-15	Asia	Malaysia	Kuala Lumpur		18212	Homo sapiens		Johnson et al.	National Institute of Allergy and Infectious Diseases, National Institutes of Health, Integrated Research Facility - Frederick	USA	
+KY425655.1	IRF0158	1999-XX-XX	2017-01-15	2017-01-15	Asia	Malaysia	Kuala Lumpur		18214	Homo sapiens		Honko et al.	National Institute of Allergy and Infectious Diseases, National Institutes of Health, Integrated Research Facility - Frederick	USA	
+MH396625.1		2018-05-17	2018-11-01	2018-11-01	Asia	India	Kozhikode District	Kerala State	18210	Homo sapiens		Yadav et al.	National Institute of Virology, Maximum Containment Laboratory	India	oronasopharynx
+MH523640.1		2018-05-17	2019-04-01	2019-04-01	Asia	India	Kozhikode District	Kerala State	18132	Homo sapiens		Yadav et al.	National Institute of Virology, Maximum Containment Laboratory	India	lung
+MH523641.1		2018-05-21	2019-04-01	2019-04-01	Asia	India	Kozhikode District	Kerala State	18027	Homo sapiens		Yadav et al.	National Institute of Virology, Maximum Containment Laboratory	India	oronasopharynx
+MH523642.1	Nipah virus	2018-05-17	2019-04-01	2019-04-01	Asia	India	Kozhikode District	Kerala State	18242	Homo sapiens		Yadav et al.	National Institute of Virology, Maximum Containment Laboratory	India	oronasopharynx
