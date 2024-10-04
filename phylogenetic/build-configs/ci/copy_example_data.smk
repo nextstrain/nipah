@@ -14,5 +14,4 @@ rule copy_example_data:
 # Add a Snakemake ruleorder directive here if you need to resolve ambiguous rules
 # that have the same output as the copy_example_data rule.
 
-ruleorder: copy_example_data > get_metadata
-ruleorder: copy_example_data > get_sequences
+ruleorder: copy_example_data > decompress

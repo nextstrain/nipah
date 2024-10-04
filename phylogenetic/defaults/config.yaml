@@ -4,6 +4,10 @@
 # Define optional config parameters with their default values here so that users
 # do not have to dig through the workflows to figure out the default values
 
+# Sequences must be FASTA and metadata must be TSV
+# Both files must be zstd compressed
+sequences_url: "https://data.nextstrain.org/files/workflows/nipah/sequences.fasta.zst"
+metadata_url: "https://data.nextstrain.org/files/workflows/nipah/metadata.tsv.zst"
 strain_id_field: "accession"
 
 filter:

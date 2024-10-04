@@ -21,25 +21,33 @@ This part of the workflow usually includes the following steps:
 See Augur's usage docs for these commands for more details.
 """
 
-rule get_metadata:
-    input:
-        metadata="../ingest/results/metadata.tsv",
+rule download:
+    """Downloading sequences and metadata from data.nextstrain.org"""
     output:
-        metadata="data/metadata.tsv",
+        sequences = "data/sequences.fasta.zst",
+        metadata = "data/metadata.tsv.zst"
+    params:
+        sequences_url = config["sequences_url"],
+        metadata_url = config["metadata_url"],
     shell:
         """
-        cp {input} {output}
+        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences}
+        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata}
         """
 
 
-rule get_sequences:
+rule decompress:
+    """Decompressing sequences and metadata"""
     input:
-        sequences="../ingest/results/sequences.fasta",
+        sequences = "data/sequences.fasta.zst",
+        metadata = "data/metadata.tsv.zst"
     output:
-        sequences="data/sequences.fasta",
+        sequences = "data/sequences.fasta",
+        metadata = "data/metadata.tsv"
     shell:
         """
-        cp {input} {output}
+        zstd -d -c {input.sequences} > {output.sequences}
+        zstd -d -c {input.metadata} > {output.metadata}
         """
 
 
