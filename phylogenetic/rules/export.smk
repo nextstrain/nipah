@@ -50,13 +50,12 @@ rule export:
         metadata="builds/{build}/metadata.tsv",
     output:
         auspice_json="auspice/nipah_{build}.json",
-        root_json="auspice/nipah_{build}_root-sequence.json",
     shell:
         """
         augur export v2 \
             --tree {input.tree} \
             --node-data {input.node_data} {input.ancestral} {input.clades} \
-            --include-root-sequence \
+            --include-root-sequence-inline \
             --auspice-config {input.auspice_config} \
             --lat-longs {input.lat_longs} \
             --output {output.auspice_json} \

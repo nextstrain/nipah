@@ -1,36 +1,55 @@
 # This configuration file should contain all required configuration parameters
 # for the ingest workflow to run to completion.
-#
-# Define optional config parameters with their default values here so that users
-# do not have to dig through the workflows to figure out the default values
 
 # Required to fetch from NCBI Datasets
 ncbi_taxon_id: "3052225"
-# ncbi_taxon_id: "10244"
 
-# Optional fields to add to the NCBI Datasets output
-ncbi_dataset_fields: []
+# The list of NCBI Datasets fields to include from NCBI Datasets output
+# These need to be the "mnemonics" of the NCBI Datasets fields, see docs for full list of fields
+# https://www.ncbi.nlm.nih.gov/datasets/docs/v2/reference-docs/command-line/dataformat/tsv/dataformat_tsv_virus-genome/#fields
+# Note: the "accession" field MUST be provided to match with the sequences
+ncbi_datasets_fields:
+  - accession
+  - sourcedb
+  - sra-accs
+  - isolate-lineage
+  - geo-region
+  - geo-location
+  - isolate-collection-date
+  - release-date
+  - update-date
+  - length
+  - host-name
+  - is-lab-host
+  - isolate-lineage-source
+  - biosample-acc
+  - submitter-names
+  - submitter-affiliation
+  - submitter-country
+
 # Config parameters related to the curate pipeline
 curate:
   geolocation_rules_url: "https://raw.githubusercontent.com/nextstrain/ncov-ingest/master/source-data/gisaid_geoLocationRules.tsv"
   local_geolocation_rules: "defaults/geolocation_rules.tsv"
   field_map:
-    Source database: database
-    Isolate Collection date: date
-    Release date: date_released
-    Update date: date_updated
-    Accession: accession
-    Isolate Lineage: strain
-    Geographic Region: region
-    Geographic Location: location
-    Submitter Names: authors
-    Submitter Affiliation: institution
-    SRA Accessions: sra_accessions
-    Length: length
-    Host Name: host
-    Isolate Lineage source: sample_type
-    BioSample accession: biosample_accession
-    Submitter Country: submitter_country
+    accession: accession
+    accession_version: accession_version
+    sourcedb: database
+    sra-accs: sra_accessions
+    isolate-lineage: strain
+    geo-region: region
+    geo-location: location
+    isolate-collection-date: date
+    release-date: date_released
+    update-date: date_updated
+    length: length
+    host-name: host
+    is-lab-host: is_lab_host
+    isolate-lineage-source: sample_type
+    biosample-acc: biosample_accessions
+    submitter-names: authors
+    submitter-affiliation: institution
+    submitter-country: submitter_country
   date_fields: ['date', 'date_released', 'date_updated']
   expected_date_formats: ['%Y', '%Y-%m', '%Y-%m-%d', '%Y-%m-%dT%H:%M:%SZ']
   # The expected field that contains the GenBank geo_loc_name
@@ -58,6 +77,7 @@ curate:
     - location
     - length
     - host
+    - is_lab_host
     - sra_accessions
     - abbr_authors
     - institution
