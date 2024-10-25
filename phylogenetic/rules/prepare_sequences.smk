@@ -92,18 +92,18 @@ rule filter:
         """
 
 
-rule nextalign_before_mask:
+rule nextclade_before_mask:
     input:
         fasta="builds/{build}/sequences.fasta",
-        reference=config["nextalign"]["reference_fasta"],
-        genemap=config["nextalign"]["genemap"],
+        reference=config["nextclade"]["reference_fasta"],
+        genemap=config["nextclade"]["genemap"],
     output:
         alignment="builds/{build}/premask.fasta",
     shell:
         """
-        nextalign run \
+        nextclade run \
             --input-ref {input.reference} \
-            --input-gene-map {input.genemap} \
+            --input-annotation {input.genemap} \
             --output-fasta {output.alignment} \
             -- {input.fasta}
         """
@@ -125,22 +125,22 @@ rule mask:
         """
 
 
-rule nextalign_after_mask:
+rule nextclade_after_mask:
     input:
         fasta="builds/{build}/masked.fasta",
-        reference=config["nextalign"]["reference_fasta"],
-        genemap=config["nextalign"]["genemap"],
+        reference=config["nextclade"]["reference_fasta"],
+        genemap=config["nextclade"]["genemap"],
     output:
         alignment="builds/{build}/aligned.fasta",
     params:
-        template_string=lambda w: f"builds/{w.build}/translations/gene.{{gene}}.fasta",
+        template_string=lambda w: f"builds/{w.build}/translations/gene.{{cds}}.fasta",
         genes=",".join(genes),
     shell:
         """
-        nextalign run \
+        nextclade run \
             --input-ref {input.reference} \
-            --input-gene-map {input.genemap} \
-            --genes {params.genes} \
+            --input-annotation {input.genemap} \
+            --cds-selection {params.genes} \
             --output-translations {params.template_string} \
             --output-fasta {output.alignment} \
             -- {input.fasta}
