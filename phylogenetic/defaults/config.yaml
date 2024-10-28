@@ -19,7 +19,7 @@ filter:
     II: "--exclude-where country=India country=Bangladesh country=Thailand"
     all: ""
 
-nextalign:
+nextclade:
   reference_fasta: "defaults/reference.fasta"
   genemap: "defaults/genemap.gff"
 
