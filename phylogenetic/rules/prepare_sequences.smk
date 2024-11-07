@@ -101,7 +101,7 @@ rule nextclade_before_mask:
         alignment="results/{build}/premask.fasta",
     shell:
         """
-        nextclade run \
+        nextclade3 run \
             --input-ref {input.reference} \
             --input-annotation {input.genemap} \
             --output-fasta {output.alignment} \
@@ -137,7 +137,7 @@ rule nextclade_after_mask:
         genes=",".join(genes),
     shell:
         """
-        nextclade run \
+        nextclade3 run \
             --input-ref {input.reference} \
             --input-annotation {input.genemap} \
             --cds-selection {params.genes} \
