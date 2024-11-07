@@ -1,9 +1,25 @@
-# Pathogen Repo Template
+# nextstrain.org/nipah
 
-This is a Nextstrain pathogen repository template for setting up a pathogen
-repo to hold the files necessary to run and maintain a Nextstrain pathogen build.
+This repository contains two workflows for the analysis of Nipah virus data:
 
-Using this template will allow you to start with the general repository
-and workflow organization that is expected of a Nextstrain maintained pathogen.
-However, the workflows will require customizations to support your specific pathogen
-and should not be expected to "just work".
+- [`ingest/`](./ingest) - Download data from GenBank, clean and curate it, and upload a pair of sequence and metadata files to S3
+- [`phylogenetic/`](./phylogenetic) - Filter sequences, align, construct phylogeny and export for visualization.
+
+Each folder contains a README.md with more information.
+
+## Installation
+
+Follow the [standard installation instructions](https://docs.nextstrain.org/en/latest/install.html) for Nextstrain's suite of software tools.
+
+## Quickstart
+
+Run the default phylogenetic workflow via:
+```
+cd phylogenetic/
+nextstrain build .
+nextstrain view .
+```
+
+## Documentation
+
+- [Running a pathogen workflow](https://docs.nextstrain.org/en/latest/tutorials/running-a-workflow.html)
