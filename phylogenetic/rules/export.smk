@@ -45,6 +45,7 @@ rule export:
         node_data="builds/{build}/branch_lengths.json",
         clades="builds/{build}/clades.json",
         ancestral="builds/{build}/muts.json",
+        description=config["export"]["description"],
         auspice_config=config["export"]["auspice_config"],
         lat_longs=rules.download_lat_longs.output,
         metadata="builds/{build}/metadata.tsv",
@@ -56,6 +57,7 @@ rule export:
             --tree {input.tree} \
             --node-data {input.node_data} {input.ancestral} {input.clades} \
             --include-root-sequence-inline \
+            --description {input.description} \
             --auspice-config {input.auspice_config} \
             --lat-longs {input.lat_longs} \
             --output {output.auspice_json} \

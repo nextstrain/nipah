@@ -41,3 +41,4 @@ clades:
 
 export:
   auspice_config: "defaults/auspice_config.json"
+  description: "defaults/description.md"
