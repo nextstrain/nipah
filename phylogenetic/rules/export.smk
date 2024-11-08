@@ -27,7 +27,7 @@ See Augur's usage docs for these commands for more details.
 
 rule download_lat_longs:
     output:
-        "builds/lat_longs.tsv",
+        "results/lat_longs.tsv",
     params:
         url="https://raw.githubusercontent.com/nextstrain/ncov/master/defaults/lat_longs.tsv",
     shell:
@@ -41,13 +41,14 @@ rule download_lat_longs:
 
 rule export:
     input:
-        tree="builds/{build}/tree.nwk",
-        node_data="builds/{build}/branch_lengths.json",
-        clades="builds/{build}/clades.json",
-        ancestral="builds/{build}/muts.json",
+        tree="results/{build}/tree.nwk",
+        node_data="results/{build}/branch_lengths.json",
+        clades="results/{build}/clades.json",
+        ancestral="results/{build}/muts.json",
+        description=config["export"]["description"],
         auspice_config=config["export"]["auspice_config"],
         lat_longs=rules.download_lat_longs.output,
-        metadata="builds/{build}/metadata.tsv",
+        metadata="results/{build}/metadata.tsv",
     output:
         auspice_json="auspice/nipah_{build}.json",
     shell:
@@ -56,6 +57,7 @@ rule export:
             --tree {input.tree} \
             --node-data {input.node_data} {input.ancestral} {input.clades} \
             --include-root-sequence-inline \
+            --description {input.description} \
             --auspice-config {input.auspice_config} \
             --lat-longs {input.lat_longs} \
             --output {output.auspice_json} \

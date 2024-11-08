@@ -9,7 +9,7 @@
       "url": "https://www.ncbi.nlm.nih.gov/genbank/"
     }
   ],
-  "build_url": "https://github.com/corneliusroemer/nipah",
+  "build_url": "https://github.com/nextstrain/nipah",
   "colorings": [
     {
       "key": "region",

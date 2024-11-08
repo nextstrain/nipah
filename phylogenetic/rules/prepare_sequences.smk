@@ -71,8 +71,8 @@ rule filter:
         exclude=config["filter"]["exclude"],
         index="data/sequences.index",
     output:
-        sequences="builds/{build}/sequences.fasta",
-        metadata="builds/{build}/metadata.tsv",
+        sequences="results/{build}/sequences.fasta",
+        metadata="results/{build}/metadata.tsv",
     params:
         metadata_id_columns=config["strain_id_field"],
         min_length=config["filter"]["min_length"],
@@ -94,14 +94,14 @@ rule filter:
 
 rule nextclade_before_mask:
     input:
-        fasta="builds/{build}/sequences.fasta",
+        fasta="results/{build}/sequences.fasta",
         reference=config["nextclade"]["reference_fasta"],
         genemap=config["nextclade"]["genemap"],
     output:
-        alignment="builds/{build}/premask.fasta",
+        alignment="results/{build}/premask.fasta",
     shell:
         """
-        nextclade run \
+        nextclade3 run \
             --input-ref {input.reference} \
             --input-annotation {input.genemap} \
             --output-fasta {output.alignment} \
@@ -111,9 +111,9 @@ rule nextclade_before_mask:
 
 rule mask:
     input:
-        alignment="builds/{build}/premask.fasta",
+        alignment="results/{build}/premask.fasta",
     output:
-        alignment="builds/{build}/masked.fasta",
+        alignment="results/{build}/masked.fasta",
     shell:
         """
         python3 scripts/mask-alignment.py \
@@ -127,17 +127,17 @@ rule mask:
 
 rule nextclade_after_mask:
     input:
-        fasta="builds/{build}/masked.fasta",
+        fasta="results/{build}/masked.fasta",
         reference=config["nextclade"]["reference_fasta"],
         genemap=config["nextclade"]["genemap"],
     output:
-        alignment="builds/{build}/aligned.fasta",
+        alignment="results/{build}/aligned.fasta",
     params:
-        template_string=lambda w: f"builds/{w.build}/translations/gene.{{cds}}.fasta",
+        template_string=lambda w: f"results/{w.build}/translations/gene.{{cds}}.fasta",
         genes=",".join(genes),
     shell:
         """
-        nextclade run \
+        nextclade3 run \
             --input-ref {input.reference} \
             --input-annotation {input.genemap} \
             --cds-selection {params.genes} \

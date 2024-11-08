@@ -21,9 +21,9 @@ See Augur's usage docs for these commands for more details.
 
 rule tree:
     input:
-        alignment="builds/{build}/aligned.fasta",
+        alignment="results/{build}/aligned.fasta",
     output:
-        tree="builds/{build}/tree_raw.nwk",
+        tree="results/{build}/tree_raw.nwk",
     params:
         args=config["tree"]["args"],
     shell:
@@ -37,12 +37,12 @@ rule tree:
 
 rule refine:
     input:
-        tree="builds/{build}/tree_raw.nwk",
-        alignment="builds/{build}/masked.fasta",
-        metadata="builds/{build}/metadata.tsv",
+        tree="results/{build}/tree_raw.nwk",
+        alignment="results/{build}/masked.fasta",
+        metadata="results/{build}/metadata.tsv",
     output:
-        tree="builds/{build}/tree.nwk",
-        node_data="builds/{build}/branch_lengths.json",
+        tree="results/{build}/tree.nwk",
+        node_data="results/{build}/branch_lengths.json",
     params:
         metadata_id_columns=config["strain_id_field"],
         coalescent=config["refine"]["coalescent"],

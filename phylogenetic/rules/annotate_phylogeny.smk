@@ -33,14 +33,14 @@ to the ones produced by Augur commands.
 
 rule ancestral:
     input:
-        tree="builds/{build}/tree.nwk",
-        alignment="builds/{build}/premask.fasta",
+        tree="results/{build}/tree.nwk",
+        alignment="results/{build}/premask.fasta",
         annotation=config["ancestral"]["reference_gb"],
     output:
-        node_data="builds/{build}/muts.json",
+        node_data="results/{build}/muts.json",
     params:
         inference="joint",
-        translations="builds/{build}/translations/gene.%GENE.fasta",
+        translations="results/{build}/translations/gene.%GENE.fasta",
         genes=" ".join(genes),
     shell:
         """
@@ -58,11 +58,11 @@ rule ancestral:
 
 rule clades:
     input:
-        tree="builds/{build}/tree.nwk",
-        node_data="builds/{build}/muts.json",
+        tree="results/{build}/tree.nwk",
+        node_data="results/{build}/muts.json",
         clades=config["clades"]["clades_defining_mutations"],
     output:
-        clades="builds/{build}/clades.json",
+        clades="results/{build}/clades.json",
     shell:
         """
         augur clades \
