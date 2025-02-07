@@ -55,6 +55,11 @@
       "key": "submitter_country",
       "title": "Submitter country",
       "type": "categorical"
+    },
+    {
+      "key": "authors",
+      "title": "authors",
+      "type": "categorical"
     }
   ],
   "geo_resolutions": [
@@ -73,7 +78,7 @@
     "country",
     "region",
     "host",
-    "authors_abbr",
+    "authors",
     "institution",
     "submitter_country"
   ]

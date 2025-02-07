@@ -47,7 +47,7 @@ curate:
     is-lab-host: is_lab_host
     isolate-lineage-source: sample_type
     biosample-acc: biosample_accessions
-    submitter-names: authors
+    submitter-names: full_authors
     submitter-affiliation: institution
     submitter-country: submitter_country
   date_fields: ['date', 'date_released', 'date_updated']
@@ -58,9 +58,9 @@ curate:
     abbreviations: ['USA']
     articles: ['and', 'd', 'de', 'del', 'des', 'di', 'do', 'en', 'l', 'la', 'las', 'le', 'los', 'nad', 'of', 'op', 'sur', 'the', 'y']
     fields: ['region', 'country', 'division', 'location']
-  authors_field: 'authors'
+  authors_field: 'full_authors'
   authors_default_value: '?'
-  abbr_authors_field: 'abbr_authors'
+  abbr_authors_field: 'authors'
   annotations: "defaults/annotations.tsv"
   annotations_id: 'accession'
   output_id_field: "accession"
@@ -81,7 +81,8 @@ curate:
     - host
     - is_lab_host
     - sra_accessions
-    - abbr_authors
+    - authors
+    - full_authors
     - institution
     - submitter_country
     - sample_type
