@@ -66,6 +66,9 @@
     "distance_measure": "div",
     "transmission_lines": false
   },
+  "metadata_columns": [
+    "strain"
+  ],
   "filters": [
     "country",
     "region",

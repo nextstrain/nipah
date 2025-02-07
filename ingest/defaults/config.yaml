@@ -65,6 +65,8 @@ curate:
   annotations_id: 'accession'
   output_id_field: "accession"
   output_sequence_field: "sequence"
+  # The field in the NDJSON record that contains the actual GenBank accession
+  genbank_accession: 'accession'
   metadata_columns:
     - accession
     - strain
@@ -83,3 +85,4 @@ curate:
     - institution
     - submitter_country
     - sample_type
+    - url
