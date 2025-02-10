@@ -55,6 +55,11 @@
       "key": "submitter_country",
       "title": "Submitter country",
       "type": "categorical"
+    },
+    {
+      "key": "authors",
+      "title": "authors",
+      "type": "categorical"
     }
   ],
   "geo_resolutions": [
@@ -66,11 +71,14 @@
     "distance_measure": "div",
     "transmission_lines": false
   },
+  "metadata_columns": [
+    "strain"
+  ],
   "filters": [
     "country",
     "region",
     "host",
-    "authors_abbr",
+    "authors",
     "institution",
     "submitter_country"
   ]
