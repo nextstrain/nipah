@@ -7,7 +7,7 @@
 # Define wildcards used for building trees in the workflow, also used in the intermediate files or auxillariary default file names.
 # {build} represents focus of samples to be analyzed
 builds: ["human", "I", "II", "all"]
-# {gene} represents the nipah genes to focus on in each build
+# {gene} represents the nipah genes for Nextclade and augur ancestral calls
 genes: ["N", "M", "F", "G", "L", "P"]
 
 # Sequences must be FASTA and metadata must be TSV
@@ -29,15 +29,21 @@ nextclade:
   reference_fasta: "defaults/reference.fasta"
   genemap: "defaults/genemap.gff"
 
+mask:
+  mask_from_beginning: 100
+  mask_from_end: 100
+  mask_flags: "--mask-terminal-gaps"
+
 tree:
   args: "'-ninit 10 -n 4 -czb -T AUTO'"
 
 refine:
   coalescent: "opt"
-  date_inference: "marginal"
+  date_inference: "marginal --date-confidence "
   clock_filter_iqd: 0
   # Estimate clock_rate from auspice/nipah_human.json and auspice/nipah_I.json rate
   clock_rate: 0.000155
+  refine_flags: " --timetree --precision 3 --keep-polytomies "
 
 ancestral:
   reference_gb: "defaults/reference.gb"

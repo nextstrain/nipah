@@ -9,11 +9,9 @@ workdir: workflow.current_basedir
 configfile: "defaults/config.yaml"
 
 builds = config["builds"]
-genes = config["genes"]
 
 wildcard_constraints:
-    build="|".join(builds),
-    gene="|".join(genes)
+    build="|".join(builds)
 
 rule all:
     input:

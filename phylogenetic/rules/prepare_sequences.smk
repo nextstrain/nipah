@@ -114,13 +114,17 @@ rule mask:
         alignment="results/{build}/premask.fasta",
     output:
         alignment="results/{build}/masked.fasta",
+    params:
+        mask_from_beginning=config["mask"]["mask_from_beginning"],
+        mask_from_end=config["mask"]["mask_from_end"],
+        mask_flags=config["mask"]["mask_flags"]
     shell:
         r"""
         python3 scripts/mask-alignment.py \
             --alignment {input.alignment:q} \
-            --mask-from-beginning 100 \
-            --mask-from-end 100 \
-            --mask-terminal-gaps \
+            --mask-from-beginning {params.mask_from_beginning} \
+            --mask-from-end {params.mask_from_end} \
+            {params.mask_flags} \
             --output {output.alignment:q}
         """
 
@@ -134,7 +138,7 @@ rule nextclade_after_mask:
         alignment="results/{build}/aligned.fasta",
     params:
         template_string=lambda w: f"results/{w.build}/translations/gene.{{cds}}.fasta",
-        genes=",".join(genes),
+        genes=",".join(config["genes"]),
     shell:
         r"""
         nextclade3 run \

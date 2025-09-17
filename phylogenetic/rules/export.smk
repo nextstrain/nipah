@@ -51,6 +51,8 @@ rule export:
         metadata="results/{build}/metadata.tsv",
     output:
         auspice_json="auspice/nipah_{build}.json",
+    params:
+        metadata_id_columns=config["strain_id_field"]
     shell:
         r"""
         augur export v2 \
@@ -61,6 +63,6 @@ rule export:
             --auspice-config {input.auspice_config:q} \
             --lat-longs {input.lat_longs:q} \
             --output {output.auspice_json:q} \
-            --metadata-id-columns accession \
+            --metadata-id-columns {params.metadata_id_columns} \
             --metadata {input.metadata:q}
         """

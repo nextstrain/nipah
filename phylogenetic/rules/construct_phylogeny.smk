@@ -49,6 +49,7 @@ rule refine:
         date_inference=config["refine"]["date_inference"],
         clock_filter_iqd=config["refine"]["clock_filter_iqd"],
         clock_rate =config["refine"]["clock_rate"],
+        refine_flags = config["refine"]["refine_flags"]
     shell:
         r"""
         augur refine \
@@ -57,13 +58,10 @@ rule refine:
             --metadata {input.metadata:q} \
             --metadata-id-columns {params.metadata_id_columns:q} \
             --output-tree {output.tree:q} \
-            --timetree \
-            --precision 3 \
-            --keep-polytomies \
             --output-node-data {output.node_data:q} \
-            --coalescent {params.coalescent:q} \
-            --date-inference {params.date_inference:q} \
-            --date-confidence \
-            --clock-filter-iqd {params.clock_filter_iqd:q} \
-            --clock-rate {params.clock_rate:q}
+            --coalescent {params.coalescent} \
+            --date-inference {params.date_inference} \
+            {params.refine_flags} \
+            --clock-filter-iqd {params.clock_filter_iqd} \
+            --clock-rate {params.clock_rate}
         """

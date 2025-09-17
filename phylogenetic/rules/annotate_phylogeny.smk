@@ -41,7 +41,7 @@ rule ancestral:
     params:
         inference="joint",
         translations="results/{build}/translations/gene.%GENE.fasta",
-        genes=" ".join(genes),
+        genes=" ".join(config["genes"]),
     shell:
         r"""
         augur ancestral \
