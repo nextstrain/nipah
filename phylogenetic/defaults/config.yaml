@@ -17,7 +17,7 @@ metadata_url: "https://data.nextstrain.org/files/workflows/nipah/metadata.tsv.zs
 strain_id_field: "accession"
 
 filter:
-  exclude: "defaults/exclude.txt"
+  exclude: "exclude.txt"
   min_length: 17000
   exclude_where:
     human: "--exclude-where host!='Homo sapiens'"
@@ -26,8 +26,8 @@ filter:
     all: ""
 
 nextclade:
-  reference_fasta: "defaults/reference.fasta"
-  genemap: "defaults/genemap.gff"
+  reference_fasta: "reference.fasta"
+  genemap: "genemap.gff"
 
 mask:
   mask_from_beginning: 100
@@ -46,11 +46,11 @@ refine:
   refine_flags: " --timetree --precision 3 --keep-polytomies "
 
 ancestral:
-  reference_gb: "defaults/reference.gb"
+  reference_gb: "reference.gb"
 
 clades:
-  clades_defining_mutations: "defaults/clades.tsv"
+  clades_defining_mutations: "clades.tsv"
 
 export:
-  auspice_config: "defaults/auspice_config.json"
-  description: "defaults/description.md"
+  auspice_config: "auspice_config.json"
+  description: "description.md"

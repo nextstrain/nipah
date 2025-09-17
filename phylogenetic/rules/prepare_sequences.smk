@@ -68,7 +68,7 @@ rule filter:
     input:
         sequences="data/sequences.fasta",
         metadata="data/metadata.tsv",
-        exclude=config["filter"]["exclude"],
+        exclude=resolve_config_path(config["filter"]["exclude"]),
         index="data/sequences.index",
     output:
         sequences="results/{build}/sequences.fasta",
@@ -95,8 +95,8 @@ rule filter:
 rule nextclade_before_mask:
     input:
         fasta="results/{build}/sequences.fasta",
-        reference=config["nextclade"]["reference_fasta"],
-        genemap=config["nextclade"]["genemap"],
+        reference=resolve_config_path(config["nextclade"]["reference_fasta"]),
+        genemap=resolve_config_path(config["nextclade"]["genemap"]),
     output:
         alignment="results/{build}/premask.fasta",
     shell:
@@ -120,7 +120,7 @@ rule mask:
         mask_flags=config["mask"]["mask_flags"]
     shell:
         r"""
-        python3 scripts/mask-alignment.py \
+        python3 {workflow.basedir}/scripts/mask-alignment.py \
             --alignment {input.alignment:q} \
             --mask-from-beginning {params.mask_from_beginning} \
             --mask-from-end {params.mask_from_end} \
@@ -132,8 +132,8 @@ rule mask:
 rule nextclade_after_mask:
     input:
         fasta="results/{build}/masked.fasta",
-        reference=config["nextclade"]["reference_fasta"],
-        genemap=config["nextclade"]["genemap"],
+        reference=resolve_config_path(config["nextclade"]["reference_fasta"]),
+        genemap=resolve_config_path(config["nextclade"]["genemap"]),
     output:
         alignment="results/{build}/aligned.fasta",
     params:

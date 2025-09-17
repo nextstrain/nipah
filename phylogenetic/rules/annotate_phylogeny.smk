@@ -35,7 +35,7 @@ rule ancestral:
     input:
         tree="results/{build}/tree.nwk",
         alignment="results/{build}/premask.fasta",
-        annotation=config["ancestral"]["reference_gb"],
+        annotation=resolve_config_path(config["ancestral"]["reference_gb"]),
     output:
         node_data="results/{build}/muts.json",
     params:
@@ -60,7 +60,7 @@ rule clades:
     input:
         tree="results/{build}/tree.nwk",
         node_data="results/{build}/muts.json",
-        clades=config["clades"]["clades_defining_mutations"],
+        clades=resolve_config_path(config["clades"]["clades_defining_mutations"]),
     output:
         clades="results/{build}/clades.json",
     shell:

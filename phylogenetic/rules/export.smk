@@ -45,8 +45,8 @@ rule export:
         node_data="results/{build}/branch_lengths.json",
         clades="results/{build}/clades.json",
         ancestral="results/{build}/muts.json",
-        description=config["export"]["description"],
-        auspice_config=config["export"]["auspice_config"],
+        description=resolve_config_path(config["export"]["description"]),
+        auspice_config=resolve_config_path(config["export"]["auspice_config"]),
         lat_longs=rules.download_lat_longs.output,
         metadata="results/{build}/metadata.tsv",
     output:
