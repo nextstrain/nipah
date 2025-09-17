@@ -4,6 +4,12 @@
 # Define optional config parameters with their default values here so that users
 # do not have to dig through the workflows to figure out the default values
 
+# Define wildcards used for building trees in the workflow, also used in the intermediate files or auxillariary default file names.
+# {build} represents focus of samples to be analyzed
+builds: ["human", "I", "II", "all"]
+# {gene} represents the nipah genes to focus on in each build
+genes: ["N", "M", "F", "G", "L", "P"]
+
 # Sequences must be FASTA and metadata must be TSV
 # Both files must be zstd compressed
 sequences_url: "https://data.nextstrain.org/files/workflows/nipah/sequences.fasta.zst"
