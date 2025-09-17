@@ -43,17 +43,17 @@ rule ancestral:
         translations="results/{build}/translations/gene.%GENE.fasta",
         genes=" ".join(genes),
     shell:
-        """
+        r"""
         augur ancestral \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --output-node-data {output.node_data} \
-            --inference {params.inference} \
+            --tree {input.tree:q} \
+            --alignment {input.alignment:q} \
+            --output-node-data {output.node_data:q} \
+            --inference {params.inference:q} \
             --genes {params.genes} \
-            --annotation {input.annotation} \
-            --translations {params.translations} \
-            --root-sequence {input.annotation} \
-            2>&1 | tee {log}
+            --annotation {input.annotation:q} \
+            --translations {params.translations:q} \
+            --root-sequence {input.annotation:q} \
+            2>&1 | tee {log:q}
         """
 
 rule clades:
@@ -64,10 +64,10 @@ rule clades:
     output:
         clades="results/{build}/clades.json",
     shell:
-        """
+        r"""
         augur clades \
-            --tree {input.tree} \
-            --mutations {input.node_data} \
-            --clades {input.clades} \
-            --output-node-data {output.clades}
+            --tree {input.tree:q} \
+            --mutations {input.node_data:q} \
+            --clades {input.clades:q} \
+            --output-node-data {output.clades:q}
         """

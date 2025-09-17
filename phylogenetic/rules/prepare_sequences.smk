@@ -30,9 +30,9 @@ rule download:
         sequences_url = config["sequences_url"],
         metadata_url = config["metadata_url"],
     shell:
-        """
-        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences}
-        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata}
+        r"""
+        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences:q}
+        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata:q}
         """
 
 
@@ -45,9 +45,9 @@ rule decompress:
         sequences = "data/sequences.fasta",
         metadata = "data/metadata.tsv"
     shell:
-        """
-        zstd -d -c {input.sequences} > {output.sequences}
-        zstd -d -c {input.metadata} > {output.metadata}
+        r"""
+        zstd -d -c {input.sequences:q} > {output.sequences:q}
+        zstd -d -c {input.metadata:q} > {output.metadata:q}
         """
 
 
@@ -57,10 +57,10 @@ rule index:
     output:
         "data/sequences.index",
     shell:
-        """
+        r"""
         augur index \
-            --sequences {input} \
-            --output {output}
+            --sequences {input:q} \
+            --output {output:q}
         """
 
 
@@ -78,17 +78,17 @@ rule filter:
         min_length=config["filter"]["min_length"],
         exclude_where=lambda wildcard: config['filter']['exclude_where'][wildcard.build],
     shell:
-        """
+        r"""
         augur filter \
-            --sequences {input.sequences} \
-            --metadata {input.metadata} \
-            --metadata-id-columns {params.metadata_id_columns} \
-            --exclude {input.exclude} \
-            --sequence-index {input.index} \
-            --min-length {params.min_length} \
+            --sequences {input.sequences:q} \
+            --metadata {input.metadata:q} \
+            --metadata-id-columns {params.metadata_id_columns:q} \
+            --exclude {input.exclude:q} \
+            --sequence-index {input.index:q} \
+            --min-length {params.min_length:q} \
             {params.exclude_where} \
-            --output-sequences {output.sequences} \
-            --output-metadata {output.metadata}
+            --output-sequences {output.sequences:q} \
+            --output-metadata {output.metadata:q}
         """
 
 
@@ -100,12 +100,12 @@ rule nextclade_before_mask:
     output:
         alignment="results/{build}/premask.fasta",
     shell:
-        """
+        r"""
         nextclade3 run \
-            --input-ref {input.reference} \
-            --input-annotation {input.genemap} \
-            --output-fasta {output.alignment} \
-            -- {input.fasta}
+            --input-ref {input.reference:q} \
+            --input-annotation {input.genemap:q} \
+            --output-fasta {output.alignment:q} \
+            -- {input.fasta:q}
         """
 
 
@@ -115,13 +115,13 @@ rule mask:
     output:
         alignment="results/{build}/masked.fasta",
     shell:
-        """
+        r"""
         python3 scripts/mask-alignment.py \
-            --alignment {input.alignment} \
+            --alignment {input.alignment:q} \
             --mask-from-beginning 100 \
             --mask-from-end 100 \
             --mask-terminal-gaps \
-            --output {output.alignment}
+            --output {output.alignment:q}
         """
 
 
@@ -136,12 +136,12 @@ rule nextclade_after_mask:
         template_string=lambda w: f"results/{w.build}/translations/gene.{{cds}}.fasta",
         genes=",".join(genes),
     shell:
-        """
+        r"""
         nextclade3 run \
-            --input-ref {input.reference} \
-            --input-annotation {input.genemap} \
+            --input-ref {input.reference:q} \
+            --input-annotation {input.genemap:q} \
             --cds-selection {params.genes} \
             --output-translations {params.template_string} \
-            --output-fasta {output.alignment} \
-            -- {input.fasta}
+            --output-fasta {output.alignment:q} \
+            -- {input.fasta:q}
         """

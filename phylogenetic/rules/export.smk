@@ -31,11 +31,11 @@ rule download_lat_longs:
     params:
         url="https://raw.githubusercontent.com/nextstrain/ncov/master/defaults/lat_longs.tsv",
     shell:
-        """
-        curl {params.url} | \
+        r"""
+        curl {params.url:q} | \
         sed "s/North Rhine Westphalia/North Rhine-Westphalia/g" | \
         sed "s/Baden-Wuerttemberg/Baden-Wurttemberg/g" \
-        > {output}
+        > {output:q}
         """
 
 
@@ -52,15 +52,15 @@ rule export:
     output:
         auspice_json="auspice/nipah_{build}.json",
     shell:
-        """
+        r"""
         augur export v2 \
-            --tree {input.tree} \
-            --node-data {input.node_data} {input.ancestral} {input.clades} \
+            --tree {input.tree:q} \
+            --node-data {input.node_data:q} {input.ancestral:q} {input.clades:q} \
             --include-root-sequence-inline \
-            --description {input.description} \
-            --auspice-config {input.auspice_config} \
-            --lat-longs {input.lat_longs} \
-            --output {output.auspice_json} \
+            --description {input.description:q} \
+            --auspice-config {input.auspice_config:q} \
+            --lat-longs {input.lat_longs:q} \
+            --output {output.auspice_json:q} \
             --metadata-id-columns accession \
-            --metadata {input.metadata}
+            --metadata {input.metadata:q}
         """

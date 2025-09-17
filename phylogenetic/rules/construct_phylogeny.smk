@@ -27,11 +27,11 @@ rule tree:
     params:
         args=config["tree"]["args"],
     shell:
-        """
+        r"""
         augur tree \
-            --alignment {input.alignment} \
+            --alignment {input.alignment:q} \
             --tree-builder-args {params.args} \
-            --output {output.tree}
+            --output {output.tree:q}
         """
 
 
@@ -50,20 +50,20 @@ rule refine:
         clock_filter_iqd=config["refine"]["clock_filter_iqd"],
         clock_rate =config["refine"]["clock_rate"],
     shell:
-        """
+        r"""
         augur refine \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --metadata {input.metadata} \
-            --metadata-id-columns {params.metadata_id_columns} \
-            --output-tree {output.tree} \
+            --tree {input.tree:q} \
+            --alignment {input.alignment:q} \
+            --metadata {input.metadata:q} \
+            --metadata-id-columns {params.metadata_id_columns:q} \
+            --output-tree {output.tree:q} \
             --timetree \
             --precision 3 \
             --keep-polytomies \
-            --output-node-data {output.node_data} \
-            --coalescent {params.coalescent} \
-            --date-inference {params.date_inference} \
+            --output-node-data {output.node_data:q} \
+            --coalescent {params.coalescent:q} \
+            --date-inference {params.date_inference:q} \
             --date-confidence \
-            --clock-filter-iqd {params.clock_filter_iqd} \
-            --clock-rate {params.clock_rate}
+            --clock-filter-iqd {params.clock_filter_iqd:q} \
+            --clock-rate {params.clock_rate:q}
         """
