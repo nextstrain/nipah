@@ -87,7 +87,7 @@ rule filter:
             --sequence-index {input.index} \
             --min-length {params.min_length} \
             {params.exclude_where} \
-            --output {output.sequences} \
+            --output-sequences {output.sequences} \
             --output-metadata {output.metadata}
         """
 
