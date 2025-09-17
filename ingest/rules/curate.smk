@@ -25,7 +25,7 @@ rule fetch_general_geolocation_rules:
 rule concat_geolocation_rules:
     input:
         general_geolocation_rules="data/general-geolocation-rules.tsv",
-        local_geolocation_rules=config["curate"]["local_geolocation_rules"],
+        local_geolocation_rules=resolve_config_path(config["curate"]["local_geolocation_rules"]),
     output:
         all_geolocation_rules="data/all-geolocation-rules.tsv",
     shell:
@@ -53,7 +53,7 @@ rule curate:
         sequences_ndjson="data/ncbi.ndjson",
         # Change the geolocation_rules input path if you are removing the above two rules
         all_geolocation_rules="data/all-geolocation-rules.tsv",
-        annotations=config["curate"]["annotations"],
+        annotations=resolve_config_path(config["curate"]["annotations"]),
     output:
         metadata="data/all_metadata.tsv",
         sequences="results/sequences.fasta",
