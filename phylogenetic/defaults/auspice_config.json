@@ -1,7 +1,8 @@
 {
   "title": "Genomic epidemiology of Nipah",
   "maintainers": [
-    {"name": "Cornelius Roemer", "url": "http://neherlab.org"}
+    {"name": "Cornelius Roemer", "url": "http://neherlab.org"},
+    {"name": "Nextstrain Team", "url": "https://nextstrain.org/"}
   ],
   "data_provenance": [
     {
