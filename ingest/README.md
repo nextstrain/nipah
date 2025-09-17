@@ -1,35 +1,73 @@
 # Ingest
 
-This workflow ingests public data from NCBI and outputs curated metadata and
-sequences that can be used as input for the phylogenetic workflow.
+### With `nextstrain run`
 
-If you have another data source or private data that needs to be formatted for
-the phylogenetic workflow, then you can use a similar workflow to curate your
-own data.
+If you haven't set up the nipah pathogen, then set it up with:
 
-## Workflow Usage
-
-The workflow can be run from the top level pathogen repo directory:
-```
-nextstrain build ingest
+```bash
+nextstrain setup nipah
 ```
 
-Alternatively, the workflow can also be run from within the ingest directory:
+Otherwise, make sure you have the latest set up with:
+
+```bash
+nextstrain update nipah
+```	```
+
+Run the ingest workflow with:
+
+```bash
+nextstrain run nipah ingest <analysis-directory>
 ```
+
+Your `<analysis-directory>` will contain the workflow's intermediate files
+and two final outputs:
+
+- `results/metadata.tsv`
+- `results/sequences.fasta`
+
+#### Dumping the full raw metadata from NCBI Datasets
+
+The workflow has a target for dumping the full raw metadata from NCBI Datasets.
+
+```bash
+nextstrain run nipah ingest <analysis-directory> dump_ncbi_dataset_report
+```
+
+This will produce the file `<analysis-directory>/data/ncbi_dataset_report_raw.tsv`, which you can inspect to determine what fields and data to use if you want to configure the workflow.
+
+### With `nextstrain build`
+
+If you don't have a local copy of the nipah repository, use Git to download it
+
+```bash
+git clone https://github.com/nextstrain/nipah.git
+```
+
+Otherwise, update your local copy of the workflow with:
+
+```bash
+cd nipah
+git pull --ff-only origin main
+```
+
+Run the ingest workflow with
+
+```bash
 cd ingest
 nextstrain build .
 ```
 
-This produces the default outputs of the ingest workflow:
+The `ingest` directory will contain the workflow's intermediate files and two final outputs:
 
-- metadata      = results/metadata.tsv
-- sequences     = results/sequences.fasta
+- `results/metadata.tsv`
+- `results/sequences.fasta`
 
-### Dumping the full raw metadata from NCBI Datasets
+#### Dumping the full raw metadata from NCBI Datasets
 
 The workflow has a target for dumping the full raw metadata from NCBI Datasets.
 
-```
+```bash
 nextstrain build ingest dump_ncbi_dataset_report
 ```
 
@@ -64,10 +102,21 @@ extend the default workflow.
 - [nextstrain-automation](build-configs/nextstrain-automation/) - automated internal Nextstrain builds.
 
 
-## Vendored
+### Nextstrain automated workflow
 
-This repository uses [`git subrepo`](https://github.com/ingydotnet/git-subrepo)
-to manage copies of ingest scripts in [vendored](vendored), from [nextstrain/ingest](https://github.com/nextstrain/ingest).
+The Nextstrain automated workflow uploads results to AWS S3 with
 
-See [vendored/README.md](vendored/README.md#vendoring) for instructions on how to update
-the vendored scripts.
+```bash
+nextstrain build \
+    --env AWS_ACCESS_KEY_ID \
+    --env AWS_SECRET_ACCESS_KEY \
+    . \
+        upload_all \
+        --configfile build-configs/nextstrain-automation/config.yaml
+```
+
+## Input data
+
+### GenBank data
+
+GenBank sequences and metadata are fetched via [NCBI datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/download-and-install/).

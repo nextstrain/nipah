@@ -9,22 +9,70 @@ Resulting tree is available here: https://nextstrain.org/groups/neherlab/staging
 
 See e.g. [Whitmer et. al, 2020](https://academic.oup.com/ve/article/7/1/veaa062/5894561)
 
-## Workflow Usage
+## Usage
 
-The workflow can be run from the top level pathogen repo directory:
-```
-nextstrain build phylogenetic
+If you're unfamiliar with Nextstrain builds, you may want to follow our
+[Running a Pathogen Workflow guide][] first and then come back here.
+
+### With `nextstrain run`
+
+If you haven't set up the nipah pathogen, then set it up with:
+
+```bash
+nextstrain setup nipah
 ```
 
-Alternatively, the workflow can also be run from within the phylogenetic directory:
+Otherwise, make sure you have the latest set up with:
+
+```bash
+nextstrain update nipah
 ```
+
+Run the phylogenetic workflow with:
+
+```bash
+nextstrain run nipah phylogenetic <analysis-directory>
+```
+
+Your `<analysis-directory>` will contain the workflow's intermediate files
+and the final output `auspice/nipah_{build}.json` files.
+
+You can view the result with
+
+```bash
+nextstrain view <analysis-directory>
+```
+
+### With `nextstrain build`
+
+If you don't have a local copy of the nipah repository, use Git to download it
+
+```bash
+git clone https://github.com/nextstrain/nipah.git
+```
+
+Otherwise, update your local copy of the workflow with:
+
+```bash
+cd mumps
+git pull --ff-only origin main
+```
+
+Run the phylogenetic workflow workflow with
+
+```bash
 cd phylogenetic
 nextstrain build .
 ```
 
-This produces the default outputs of the phylogenetic workflow:
+The `phylogenetic` directory will contain the workflow's intermediate files
+and the final output `auspice/nipah_{build}.json` files .
 
-- auspice_json(s) = auspice/*.json
+Once you've run the build, you can view the results with:
+
+```bash
+nextstrain view .
+```
 
 ## Data Requirements
 
