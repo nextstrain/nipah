@@ -20,6 +20,8 @@ rule all:
         auspice_json = expand("auspice/nipah_{build}.json", build=builds),
 
 # These rules are imported in the order that they are expected to run.
+include: "../shared/vendored/snakemake/remote_files.smk"
+include: "rules/merge_inputs.smk"
 include: "rules/prepare_sequences.smk"
 include: "rules/construct_phylogeny.smk"
 include: "rules/annotate_phylogeny.smk"

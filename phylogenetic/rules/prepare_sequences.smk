@@ -21,41 +21,11 @@ This part of the workflow usually includes the following steps:
 See Augur's usage docs for these commands for more details.
 """
 
-rule download:
-    """Downloading sequences and metadata from data.nextstrain.org"""
-    output:
-        sequences = "data/sequences.fasta.zst",
-        metadata = "data/metadata.tsv.zst"
-    params:
-        sequences_url = config["sequences_url"],
-        metadata_url = config["metadata_url"],
-    shell:
-        r"""
-        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences:q}
-        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata:q}
-        """
-
-
-rule decompress:
-    """Decompressing sequences and metadata"""
-    input:
-        sequences = "data/sequences.fasta.zst",
-        metadata = "data/metadata.tsv.zst"
-    output:
-        sequences = "data/sequences.fasta",
-        metadata = "data/metadata.tsv"
-    shell:
-        r"""
-        zstd -d -c {input.sequences:q} > {output.sequences:q}
-        zstd -d -c {input.metadata:q} > {output.metadata:q}
-        """
-
-
 rule index:
     input:
-        "data/sequences.fasta",
+        "results/sequences.fasta",
     output:
-        "data/sequences.index",
+        "results/sequences.index",
     shell:
         r"""
         augur index \
@@ -66,10 +36,10 @@ rule index:
 
 rule filter:
     input:
-        sequences="data/sequences.fasta",
-        metadata="data/metadata.tsv",
+        sequences="results/sequences.fasta",
+        metadata="results/metadata.tsv",
         exclude=resolve_config_path(config["filter"]["exclude"]),
-        index="data/sequences.index",
+        index="results/sequences.index",
     output:
         sequences="results/{build}/sequences.fasta",
         metadata="results/{build}/metadata.tsv",

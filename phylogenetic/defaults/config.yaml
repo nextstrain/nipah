@@ -12,8 +12,12 @@ genes: ["N", "M", "F", "G", "L", "P"]
 
 # Sequences must be FASTA and metadata must be TSV
 # Both files must be zstd compressed
-sequences_url: "https://data.nextstrain.org/files/workflows/nipah/sequences.fasta.zst"
-metadata_url: "https://data.nextstrain.org/files/workflows/nipah/metadata.tsv.zst"
+
+inputs:
+  - name: ncbi
+    sequences: "https://data.nextstrain.org/files/workflows/nipah/sequences.fasta.zst"
+    metadata: "https://data.nextstrain.org/files/workflows/nipah/metadata.tsv.zst"
+
 strain_id_field: "accession"
 
 filter:
