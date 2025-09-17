@@ -29,10 +29,10 @@ rule fetch_ncbi_dataset_package:
     benchmark:
         "benchmarks/fetch_ncbi_dataset_package.txt"
     shell:
-        """
+        r"""
         datasets download virus genome taxon {params.ncbi_taxon_id:q} \
             --no-progressbar \
-            --filename {output.dataset_package}
+            --filename {output.dataset_package:q}
         """
 
 
@@ -44,9 +44,9 @@ rule extract_ncbi_dataset_sequences:
     benchmark:
         "benchmarks/extract_ncbi_dataset_sequences.txt"
     shell:
-        """
-        unzip -jp {input.dataset_package} \
-            ncbi_dataset/data/genomic.fna > {output.ncbi_dataset_sequences}
+        r"""
+        unzip -jp {input.dataset_package:q} \
+            ncbi_dataset/data/genomic.fna > {output.ncbi_dataset_sequences:q}
         """
 
 
@@ -93,9 +93,9 @@ rule format_ncbi_dataset_report:
     benchmark:
         "benchmarks/format_ncbi_dataset_report.txt"
     shell:
-        """
+        r"""
         dataformat tsv virus-genome \
-            --package {input.dataset_package} \
+            --package {input.dataset_package:q} \
             --fields {params.ncbi_datasets_fields:q} \
             --elide-header \
             | csvtk fix-quotes -Ht \
@@ -104,7 +104,7 @@ rule format_ncbi_dataset_report:
             | csvtk -t mutate -f accession_version -n accession -p "^(.+?)\." \
             | csvtk del-quotes -t \
             | tsv-select -H -f accession --rest last \
-            > {output.ncbi_dataset_tsv}
+            > {output.ncbi_dataset_tsv:q}
         """
 
 
@@ -123,13 +123,13 @@ rule format_ncbi_datasets_ndjson:
     benchmark:
         "benchmarks/format_ncbi_datasets_ndjson.txt"
     shell:
-        """
+        r"""
         augur curate passthru \
-            --metadata {input.ncbi_dataset_tsv} \
-            --fasta {input.ncbi_dataset_sequences} \
+            --metadata {input.ncbi_dataset_tsv:q} \
+            --fasta {input.ncbi_dataset_sequences:q} \
             --seq-id-column accession_version \
             --seq-field sequence \
             --unmatched-reporting warn \
             --duplicate-reporting warn \
-            2> {log} > {output.ndjson}
+            2> {log:q} > {output.ndjson:q}
         """
