@@ -6,34 +6,6 @@ from NCBI and outputs the clean data as two separate files:
     - results/sequences.fasta
 """
 
-
-# The following two rules can be ignored if you choose not to use the
-# generalized geolocation rules that are shared across pathogens.
-# The Nextstrain team will try to maintain a generalized set of geolocation
-# rules that can then be overridden by local geolocation rules per pathogen repo.
-rule fetch_general_geolocation_rules:
-    output:
-        general_geolocation_rules="data/general-geolocation-rules.tsv",
-    params:
-        geolocation_rules_url=config["curate"]["geolocation_rules_url"],
-    shell:
-        r"""
-        curl {params.geolocation_rules_url:q} > {output.general_geolocation_rules:q}
-        """
-
-
-rule concat_geolocation_rules:
-    input:
-        general_geolocation_rules="data/general-geolocation-rules.tsv",
-        local_geolocation_rules=resolve_config_path(config["curate"]["local_geolocation_rules"]),
-    output:
-        all_geolocation_rules="data/all-geolocation-rules.tsv",
-    shell:
-        r"""
-        cat {input.general_geolocation_rules:q} {input.local_geolocation_rules:q} >> {output.all_geolocation_rules:q}
-        """
-
-
 def format_field_map(field_map: dict[str, str]) -> str:
     """
     Format dict to `"key1"="value1" "key2"="value2"...` for use in shell commands.
@@ -51,8 +23,7 @@ def format_field_map(field_map: dict[str, str]) -> str:
 rule curate:
     input:
         sequences_ndjson="data/ncbi.ndjson",
-        # Change the geolocation_rules input path if you are removing the above two rules
-        all_geolocation_rules="data/all-geolocation-rules.tsv",
+        geolocation_rules=config["curate"]["local_geolocation_rules"],
         annotations=resolve_config_path(config["curate"]["annotations"]),
     output:
         metadata="data/all_metadata.tsv",
@@ -95,7 +66,7 @@ rule curate:
                 --default-value {params.authors_default_value} \
                 --abbr-authors-field {params.abbr_authors_field} \
             | augur curate apply-geolocation-rules \
-                --geolocation-rules {input.all_geolocation_rules:q} \
+                --geolocation-rules {input.geolocation_rules:q} \
             | augur curate apply-record-annotations \
                 --annotations {input.annotations:q} \
                 --id-field {params.annotations_id} \
