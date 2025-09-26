@@ -35,6 +35,25 @@ rule fetch_ncbi_dataset_package:
             --filename {output.dataset_package:q}
         """
 
+# Note: This rule is not part of the default workflow!
+# It is intended to be used as a specific target for users to be able
+# to inspect and explore the full raw metadata from NCBI Datasets.
+rule dump_ncbi_dataset_report:
+    input:
+        dataset_package="data/ncbi_dataset.zip",
+    output:
+        ncbi_dataset_tsv="data/ncbi_dataset_report_raw.tsv",
+    benchmark:
+        "benchmarks/dump_ncbi_dataset_report.txt"
+    log:
+        "logs/dump_ncbi_dataset_report.txt"
+    shell:
+        r"""
+        exec &> >(tee {log:q})
+
+        dataformat tsv virus-genome \
+            --package {input.dataset_package:q} > {output.ncbi_dataset_tsv:q}
+        """
 
 rule extract_ncbi_dataset_sequences:
     input:
