@@ -68,40 +68,6 @@ rule extract_ncbi_dataset_sequences:
             ncbi_dataset/data/genomic.fna > {output.ncbi_dataset_sequences:q}
         """
 
-
-def _get_ncbi_dataset_field_mnemonics(provided_fields: list) -> str:
-    """
-    Return list of NCBI Dataset report field mnemonics for fields that we want
-    to parse out of the dataset report. The column names in the output TSV
-    are different from the mnemonics.
-
-    Additional *provided_fields* will be appended to the end of the list.
-
-    See NCBI Dataset docs for full list of available fields and their column
-    names in the output:
-    https://www.ncbi.nlm.nih.gov/datasets/docs/v2/reference-docs/command-line/dataformat/tsv/dataformat_tsv_virus-genome/#fields
-    """
-    fields = [
-        "accession",
-        "sourcedb",
-        "sra-accs",
-        "isolate-lineage",
-        "geo-region",
-        "geo-location",
-        "isolate-collection-date",
-        "release-date",
-        "update-date",
-        "length",
-        "host-name",
-        "isolate-lineage-source",
-        "biosample-acc",
-        "submitter-names",
-        "submitter-affiliation",
-        "submitter-country",
-    ]
-    return ",".join(fields + provided_fields)
-
-
 rule format_ncbi_dataset_report:
     input:
         dataset_package="data/ncbi_dataset.zip",
@@ -111,18 +77,20 @@ rule format_ncbi_dataset_report:
         ncbi_datasets_fields=",".join(config["ncbi_datasets_fields"]),
     benchmark:
         "benchmarks/format_ncbi_dataset_report.txt"
+    log:
+        "logs/format_ncbi_dataset_report.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         dataformat tsv virus-genome \
             --package {input.dataset_package:q} \
             --fields {params.ncbi_datasets_fields:q} \
             --elide-header \
             | csvtk fix-quotes -Ht \
-            | csvtk add-header -t -l -n {params.ncbi_datasets_fields:q} \
+            | csvtk add-header -t -n {params.ncbi_datasets_fields:q} \
             | csvtk rename -t -f accession -n accession_version \
-            | csvtk -t mutate -f accession_version -n accession -p "^(.+?)\." \
-            | csvtk del-quotes -t \
-            | tsv-select -H -f accession --rest last \
+            | csvtk -t mutate -f accession_version -n accession -p "^(.+?)\." --at 1 \
             > {output.ncbi_dataset_tsv:q}
         """
 
