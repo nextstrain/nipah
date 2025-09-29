@@ -63,6 +63,6 @@ rule export:
             --auspice-config {input.auspice_config:q} \
             --lat-longs {input.lat_longs:q} \
             --output {output.auspice_json:q} \
-            --metadata-id-columns {params.metadata_id_columns} \
+            --metadata-id-columns {params.metadata_id_columns:q} \
             --metadata {input.metadata:q}
         """
