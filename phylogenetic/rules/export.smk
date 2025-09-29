@@ -4,10 +4,10 @@ export a Nextstrain dataset.
 
 REQUIRED INPUTS:
 
-    metadata        = data/metadata.tsv
-    tree            = results/tree.nwk
-    branch_lengths  = results/branch_lengths.json
-    node_data       = results/*.json
+    metadata        = results/{build}/metadata.tsv
+    tree            = results/{build}/tree.nwk
+    branch_lengths  = results/{build}/branch_lengths.json
+    node_data       = results/{build}/*.json
 
 OUTPUTS:
 
