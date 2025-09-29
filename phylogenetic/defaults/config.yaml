@@ -42,12 +42,8 @@ tree:
   args: "'-ninit 10 -n 4 -czb -T AUTO'"
 
 refine:
-  coalescent: "opt"
-  date_inference: "marginal --date-confidence "
-  clock_filter_iqd: 0
   # Estimate clock_rate from auspice/nipah_human.json and auspice/nipah_I.json rate
-  clock_rate: 0.000155
-  refine_flags: " --timetree --precision 3 --keep-polytomies "
+  refine_flags: " --timetree --precision 3 --keep-polytomies --date-inference marginal --date-confidence --clock-filter-iqd 0 --clock-rate 0.000155 --coalescent opt"
 
 ancestral:
   reference_gb: "reference.gb"
