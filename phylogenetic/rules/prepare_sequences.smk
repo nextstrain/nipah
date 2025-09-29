@@ -75,7 +75,8 @@ rule nextclade_before_mask:
             --input-ref {input.reference:q} \
             --input-annotation {input.genemap:q} \
             --output-fasta {output.alignment:q} \
-            -- {input.fasta:q}
+            -- \
+            {input.fasta:q}
         """
 
 
