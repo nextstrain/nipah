@@ -23,7 +23,7 @@ def format_field_map(field_map: dict[str, str]) -> str:
 rule curate:
     input:
         sequences_ndjson="data/ncbi.ndjson",
-        geolocation_rules=config["curate"]["local_geolocation_rules"],
+        geolocation_rules=resolve_config_path(config["curate"]["local_geolocation_rules"]),
         annotations=resolve_config_path(config["curate"]["annotations"]),
     output:
         metadata="data/all_metadata.tsv",
