@@ -11,13 +11,19 @@ Each folder contains a README.md with more information.
 
 Follow the [standard installation instructions](https://docs.nextstrain.org/en/latest/install.html) for Nextstrain's suite of software tools.
 
+After you've installed the Nextstrain CLI, you can set up nipah with
+
+```bash
+nextstrain setup nipah
+```
+
 ## Quickstart
 
 Run the default phylogenetic workflow via:
 ```
-cd phylogenetic/
-nextstrain build .
-nextstrain view .
+mkdir nipah-analysis
+nextstrain run nipah phylogenetic nipah-analysis
+nextstrain view nipah-analysis
 ```
 
 ## Documentation

@@ -6,34 +6,6 @@ from NCBI and outputs the clean data as two separate files:
     - results/sequences.fasta
 """
 
-
-# The following two rules can be ignored if you choose not to use the
-# generalized geolocation rules that are shared across pathogens.
-# The Nextstrain team will try to maintain a generalized set of geolocation
-# rules that can then be overridden by local geolocation rules per pathogen repo.
-rule fetch_general_geolocation_rules:
-    output:
-        general_geolocation_rules="data/general-geolocation-rules.tsv",
-    params:
-        geolocation_rules_url=config["curate"]["geolocation_rules_url"],
-    shell:
-        """
-        curl {params.geolocation_rules_url} > {output.general_geolocation_rules}
-        """
-
-
-rule concat_geolocation_rules:
-    input:
-        general_geolocation_rules="data/general-geolocation-rules.tsv",
-        local_geolocation_rules=config["curate"]["local_geolocation_rules"],
-    output:
-        all_geolocation_rules="data/all-geolocation-rules.tsv",
-    shell:
-        """
-        cat {input.general_geolocation_rules} {input.local_geolocation_rules} >> {output.all_geolocation_rules}
-        """
-
-
 def format_field_map(field_map: dict[str, str]) -> str:
     """
     Format dict to `"key1"="value1" "key2"="value2"...` for use in shell commands.
@@ -51,9 +23,8 @@ def format_field_map(field_map: dict[str, str]) -> str:
 rule curate:
     input:
         sequences_ndjson="data/ncbi.ndjson",
-        # Change the geolocation_rules input path if you are removing the above two rules
-        all_geolocation_rules="data/all-geolocation-rules.tsv",
-        annotations=config["curate"]["annotations"],
+        geolocation_rules=resolve_config_path(config["curate"]["local_geolocation_rules"]),
+        annotations=resolve_config_path(config["curate"]["annotations"]),
     output:
         metadata="data/all_metadata.tsv",
         sequences="results/sequences.fasta",
@@ -76,8 +47,8 @@ rule curate:
         id_field=config["curate"]["output_id_field"],
         sequence_field=config["curate"]["output_sequence_field"],
     shell:
-        """
-        (cat {input.sequences_ndjson} \
+        r"""
+        (cat {input.sequences_ndjson:q} \
             | augur curate rename \
                 --field-map {params.field_map} \
             | augur curate normalize-strings \
@@ -95,15 +66,15 @@ rule curate:
                 --default-value {params.authors_default_value} \
                 --abbr-authors-field {params.abbr_authors_field} \
             | augur curate apply-geolocation-rules \
-                --geolocation-rules {input.all_geolocation_rules} \
+                --geolocation-rules {input.geolocation_rules:q} \
             | augur curate apply-record-annotations \
-                --annotations {input.annotations} \
+                --annotations {input.annotations:q} \
                 --id-field {params.annotations_id} \
             | augur curate passthru \
-                --output-metadata {output.metadata} \
-                --output-fasta {output.sequences} \
+                --output-metadata {output.metadata:q} \
+                --output-fasta {output.sequences:q} \
                 --output-id-field {params.id_field} \
-                --output-seq-field {params.sequence_field} ) 2>> {log}
+                --output-seq-field {params.sequence_field} ) 2>> {log:q}
         """
 
 rule add_metadata_columns:
@@ -118,12 +89,12 @@ rule add_metadata_columns:
     params:
         accession=config['curate']['genbank_accession']
     shell:
-        """
+        r"""
         csvtk mutate2 -t \
           -n url \
           -e '"https://www.ncbi.nlm.nih.gov/nuccore/" + ${params.accession}' \
-          {input.metadata} \
-        > {output.metadata}
+          {input.metadata:q} \
+        > {output.metadata:q}
         """
 
 rule subset_metadata:
@@ -134,7 +105,7 @@ rule subset_metadata:
     params:
         metadata_fields=",".join(config["curate"]["metadata_columns"]),
     shell:
-        """
-        tsv-select -H -f {params.metadata_fields} \
-            {input.metadata} > {output.subset_metadata}
+        r"""
+        csvtk cut -t -f {params.metadata_fields} \
+            {input.metadata} > {output.subset_metadata:q}
         """

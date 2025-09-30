@@ -3,13 +3,13 @@ This part of the workflow creates additonal annotations for the phylogenetic tre
 
 REQUIRED INPUTS:
 
-    metadata            = data/metadata.tsv
-    prepared_sequences  = results/prepared_sequences.fasta
-    tree                = results/tree.nwk
+    metadata            = results/{build}/metadata.tsv
+    prepared_sequences  = results/{build}/sequences.fasta
+    tree                = results/{build}/tree.nwk
 
 OUTPUTS:
 
-    node_data = results/*.json
+    node_data = results/{build}/*.json
 
     There are no required outputs for this part of the workflow as it depends
     on which annotations are created. All outputs are expected to be node data
@@ -35,39 +35,39 @@ rule ancestral:
     input:
         tree="results/{build}/tree.nwk",
         alignment="results/{build}/premask.fasta",
-        annotation=config["ancestral"]["reference_gb"],
+        annotation=resolve_config_path(config["ancestral"]["reference_gb"]),
     output:
         node_data="results/{build}/muts.json",
     params:
         inference="joint",
         translations="results/{build}/translations/gene.%GENE.fasta",
-        genes=" ".join(genes),
+        genes=" ".join(config["genes"]),
     shell:
-        """
+        r"""
         augur ancestral \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --output-node-data {output.node_data} \
-            --inference {params.inference} \
+            --tree {input.tree:q} \
+            --alignment {input.alignment:q} \
+            --output-node-data {output.node_data:q} \
+            --inference {params.inference:q} \
             --genes {params.genes} \
-            --annotation {input.annotation} \
-            --translations {params.translations} \
-            --root-sequence {input.annotation} \
-            2>&1 | tee {log}
+            --annotation {input.annotation:q} \
+            --translations {params.translations:q} \
+            --root-sequence {input.annotation:q} \
+            2>&1 | tee {log:q}
         """
 
 rule clades:
     input:
         tree="results/{build}/tree.nwk",
         node_data="results/{build}/muts.json",
-        clades=config["clades"]["clades_defining_mutations"],
+        clades=resolve_config_path(config["clades"]["clades_defining_mutations"]),
     output:
         clades="results/{build}/clades.json",
     shell:
-        """
+        r"""
         augur clades \
-            --tree {input.tree} \
-            --mutations {input.node_data} \
-            --clades {input.clades} \
-            --output-node-data {output.clades}
+            --tree {input.tree:q} \
+            --mutations {input.node_data:q} \
+            --clades {input.clades:q} \
+            --output-node-data {output.clades:q}
         """

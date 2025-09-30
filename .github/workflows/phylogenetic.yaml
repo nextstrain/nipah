@@ -114,7 +114,7 @@ jobs:
         declare -a config
 
         if [[ "$TRIAL_NAME" ]]; then
-          config+=("deploy_url=s3://nextstrain-staging/zika_trials_${TRIAL_NAME}_")
+          config+=("deploy_url=s3://nextstrain-staging/nipah_trials_${TRIAL_NAME}_")
         fi
 
         if [[ "$SEQUENCES_URL" ]]; then

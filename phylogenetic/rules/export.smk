@@ -4,10 +4,10 @@ export a Nextstrain dataset.
 
 REQUIRED INPUTS:
 
-    metadata        = data/metadata.tsv
-    tree            = results/tree.nwk
-    branch_lengths  = results/branch_lengths.json
-    node_data       = results/*.json
+    metadata        = results/{build}/metadata.tsv
+    tree            = results/{build}/tree.nwk
+    branch_lengths  = results/{build}/branch_lengths.json
+    node_data       = results/{build}/*.json
 
 OUTPUTS:
 
@@ -31,11 +31,11 @@ rule download_lat_longs:
     params:
         url="https://raw.githubusercontent.com/nextstrain/ncov/master/defaults/lat_longs.tsv",
     shell:
-        """
-        curl {params.url} | \
+        r"""
+        curl {params.url:q} | \
         sed "s/North Rhine Westphalia/North Rhine-Westphalia/g" | \
         sed "s/Baden-Wuerttemberg/Baden-Wurttemberg/g" \
-        > {output}
+        > {output:q}
         """
 
 
@@ -45,22 +45,24 @@ rule export:
         node_data="results/{build}/branch_lengths.json",
         clades="results/{build}/clades.json",
         ancestral="results/{build}/muts.json",
-        description=config["export"]["description"],
-        auspice_config=config["export"]["auspice_config"],
+        description=resolve_config_path(config["export"]["description"]),
+        auspice_config=resolve_config_path(config["export"]["auspice_config"]),
         lat_longs=rules.download_lat_longs.output,
         metadata="results/{build}/metadata.tsv",
     output:
         auspice_json="auspice/nipah_{build}.json",
+    params:
+        metadata_id_columns=config["strain_id_field"]
     shell:
-        """
+        r"""
         augur export v2 \
-            --tree {input.tree} \
-            --node-data {input.node_data} {input.ancestral} {input.clades} \
+            --tree {input.tree:q} \
+            --node-data {input.node_data:q} {input.ancestral:q} {input.clades:q} \
             --include-root-sequence-inline \
-            --description {input.description} \
-            --auspice-config {input.auspice_config} \
-            --lat-longs {input.lat_longs} \
-            --output {output.auspice_json} \
-            --metadata-id-columns accession \
-            --metadata {input.metadata}
+            --description {input.description:q} \
+            --auspice-config {input.auspice_config:q} \
+            --lat-longs {input.lat_longs:q} \
+            --output {output.auspice_json:q} \
+            --metadata-id-columns {params.metadata_id_columns:q} \
+            --metadata {input.metadata:q}
         """

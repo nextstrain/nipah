@@ -1,4 +1,5 @@
-MK995296.1
-MK995297.1
-OK572974.1
-MK801755.1
+# Format: <GenBank accession> [# <strain name> <reason>]
+MK995296
+MK995297
+OK572974
+MK801755
