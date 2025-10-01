@@ -27,6 +27,7 @@ rule upload_to_s3:
         quiet="" if send_notifications else "--quiet",
         s3_dst=config["s3_dst"],
         cloudfront_domain=config["cloudfront_domain"],
+        current_basedir = str(workflow.current_basedir),
     shell:
         """
         {params.current_basedir}/../../../shared/vendored/scripts/upload-to-s3 \
