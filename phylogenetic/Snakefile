@@ -27,15 +27,6 @@ include: "rules/construct_phylogeny.smk"
 include: "rules/annotate_phylogeny.smk"
 include: "rules/export.smk"
 
-rule deploy:
-    input:
-        "auspice/nipah_all.json",
-        "auspice/nipah_all_root-sequence.json",
-    shell:
-        """
-        nextstrain remote upload nextstrain.org/groups/neherlab/staging/nipah {input} 2>&1
-        """
-
 # Allow users to import custom rules provided via the config.
 # This allows users to run custom rules that can extend or override the workflow.
 # A concrete example of using custom rules is the extension of the workflow with
