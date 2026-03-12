@@ -12,7 +12,7 @@ Otherwise, make sure you have the latest set up with:
 
 ```bash
 nextstrain update nipah
-```	```
+```
 
 Run the ingest workflow with:
 

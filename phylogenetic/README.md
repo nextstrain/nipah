@@ -54,7 +54,7 @@ git clone https://github.com/nextstrain/nipah.git
 Otherwise, update your local copy of the workflow with:
 
 ```bash
-cd mumps
+cd nipah
 git pull --ff-only origin main
 ```
 
