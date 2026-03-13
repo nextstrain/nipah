@@ -97,9 +97,9 @@ if len(_input_metadata) == 1:
         output:
             metadata = "results/metadata.tsv",
         log:
-            "logs/decompress_metadata.txt",
+            "logs/decompress_metadata.txt"
         benchmark:
-            "benchmarks/decompress_metadata.txt",
+            "benchmarks/decompress_metadata.txt"
         shell:
             r"""
             exec &> >(tee {log:q})
@@ -122,7 +122,7 @@ else:
         output:
             metadata = "results/metadata.tsv"
         log:
-            "logs/merge_metadata.txt",
+            "logs/merge_metadata.txt"
         benchmark:
             "benchmarks/merge_metadata.txt"
         shell:
@@ -149,9 +149,9 @@ if len(_input_sequences) == 1:
         output:
             sequences = "results/sequences.fasta",
         log:
-            "logs/decompress_sequences.txt",
+            "logs/decompress_sequences.txt"
         benchmark:
-            "benchmarks/decompress_sequences.txt",
+            "benchmarks/decompress_sequences.txt"
         shell:
             r"""
             exec &> >(tee {log:q})
@@ -171,7 +171,7 @@ else:
         output:
             sequences = "results/sequences.fasta",
         log:
-            "logs/merge_sequences.txt",
+            "logs/merge_sequences.txt"
         benchmark:
             "benchmarks/merge_sequences.txt"
         shell:

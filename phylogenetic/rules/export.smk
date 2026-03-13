@@ -30,8 +30,14 @@ rule download_lat_longs:
         "results/lat_longs.tsv",
     params:
         url="https://raw.githubusercontent.com/nextstrain/ncov/master/defaults/lat_longs.tsv",
+    log:
+        "logs/download_lat_longs.txt"
+    benchmark:
+        "benchmarks/download_lat_longs.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         curl {params.url:q} | \
         sed "s/North Rhine Westphalia/North Rhine-Westphalia/g" | \
         sed "s/Baden-Wuerttemberg/Baden-Wurttemberg/g" \
@@ -53,8 +59,14 @@ rule export:
         auspice_json="auspice/nipah_{build}.json",
     params:
         metadata_id_columns=config["strain_id_field"]
+    log:
+        "logs/export_{build}.txt"
+    benchmark:
+        "benchmarks/export_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur export v2 \
             --tree {input.tree:q} \
             --node-data {input.node_data:q} {input.ancestral:q} {input.clades:q} \

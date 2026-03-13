@@ -26,8 +26,14 @@ rule index:
         "results/sequences.fasta",
     output:
         "results/sequences.index",
+    log:
+        "logs/index.txt"
+    benchmark:
+        "benchmarks/index.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur index \
             --sequences {input:q} \
             --output {output:q}
@@ -47,8 +53,14 @@ rule filter:
         metadata_id_columns=config["strain_id_field"],
         min_length=config["filter"]["min_length"],
         exclude_where=lambda wildcard: config['filter']['exclude_where'][wildcard.build],
+    log:
+        "logs/filter_{build}.txt"
+    benchmark:
+        "benchmarks/filter_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur filter \
             --sequences {input.sequences:q} \
             --metadata {input.metadata:q} \
@@ -69,8 +81,14 @@ rule nextclade_before_mask:
         genemap=resolve_config_path(config["nextclade"]["genemap"]),
     output:
         alignment="results/{build}/premask.fasta",
+    log:
+        "logs/nextclade_before_mask_{build}.txt"
+    benchmark:
+        "benchmarks/nextclade_before_mask_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         nextclade3 run \
             --input-ref {input.reference:q} \
             --input-annotation {input.genemap:q} \
@@ -89,8 +107,14 @@ rule mask:
         mask_from_beginning=config["mask"]["mask_from_beginning"],
         mask_from_end=config["mask"]["mask_from_end"],
         mask_flags=config["mask"]["mask_flags"]
+    log:
+        "logs/mask_{build}.txt"
+    benchmark:
+        "benchmarks/mask_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         python3 {workflow.basedir}/scripts/mask-alignment.py \
             --alignment {input.alignment:q} \
             --mask-from-beginning {params.mask_from_beginning} \
@@ -110,8 +134,14 @@ rule nextclade_after_mask:
     params:
         template_string=lambda w: f"results/{w.build}/translations/gene.{{cds}}.fasta",
         genes=",".join(config["genes"]),
+    log:
+        "logs/nextclade_after_mask_{build}.txt"
+    benchmark:
+        "benchmarks/nextclade_after_mask_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         nextclade3 run \
             --input-ref {input.reference:q} \
             --input-annotation {input.genemap:q} \
