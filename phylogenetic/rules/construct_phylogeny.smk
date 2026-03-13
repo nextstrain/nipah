@@ -26,8 +26,14 @@ rule tree:
         tree="results/{build}/tree_raw.nwk",
     params:
         args=config["tree"]["args"],
+    log:
+        "logs/tree_{build}.txt"
+    benchmark:
+        "benchmarks/tree_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur tree \
             --alignment {input.alignment:q} \
             --tree-builder-args {params.args} \
@@ -46,8 +52,14 @@ rule refine:
     params:
         metadata_id_columns=config["strain_id_field"],
         refine_flags = config["refine"]["refine_flags"]
+    log:
+        "logs/refine_{build}.txt"
+    benchmark:
+        "benchmarks/refine_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur refine \
             --tree {input.tree:q} \
             --alignment {input.alignment:q} \

@@ -42,8 +42,14 @@ rule ancestral:
         inference="joint",
         translations="results/{build}/translations/gene.%GENE.fasta",
         genes=" ".join(config["genes"]),
+    log:
+        "logs/ancestral_{build}.txt"
+    benchmark:
+        "benchmarks/ancestral_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur ancestral \
             --tree {input.tree:q} \
             --alignment {input.alignment:q} \
@@ -52,8 +58,7 @@ rule ancestral:
             --genes {params.genes} \
             --annotation {input.annotation:q} \
             --translations {params.translations:q} \
-            --root-sequence {input.annotation:q} \
-            2>&1 | tee {log:q}
+            --root-sequence {input.annotation:q}
         """
 
 rule clades:
@@ -63,8 +68,14 @@ rule clades:
         clades=resolve_config_path(config["clades"]["clades_defining_mutations"]),
     output:
         clades="results/{build}/clades.json",
+    log:
+        "logs/clades_{build}.txt"
+    benchmark:
+        "benchmarks/clades_{build}.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur clades \
             --tree {input.tree:q} \
             --mutations {input.node_data:q} \
