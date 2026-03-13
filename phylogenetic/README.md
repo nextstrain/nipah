@@ -104,3 +104,16 @@ Modules are all [included](https://snakemake.readthedocs.io/en/stable/snakefiles
 in the main Snakefile in the order that they are expected to run.
 
 [Nextstrain datasets]: https://docs.nextstrain.org/en/latest/reference/glossary.html#term-dataset
+
+## Update example data
+
+[Example data][] should be updated occasionally. To update, run:
+
+```bash
+nextstrain build . update_example_data -F \
+    --configfiles defaults/config.yaml build-configs/chores/config.yaml
+```
+
+[CI]: https://github.com/nextstrain/WNV/actions/workflows/ci.yaml
+[Example data]: ./example_data/
+[Nextstrain datasets]: https://docs.nextstrain.org/en/latest/reference/glossary.html#term-dataset
