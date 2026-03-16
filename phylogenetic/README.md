@@ -54,7 +54,7 @@ git clone https://github.com/nextstrain/nipah.git
 Otherwise, update your local copy of the workflow with:
 
 ```bash
-cd mumps
+cd nipah
 git pull --ff-only origin main
 ```
 
@@ -96,9 +96,6 @@ options to override these default values.
 
 The rules directory contains separate Snakefiles (`*.smk`) as modules of the core phylogenetic workflow.
 The modules of the workflow are in separate files to keep the main phylogenetic [Snakefile](Snakefile) succinct and organized.
-
-The `workdir` is hardcoded to be the phylogenetic directory so all filepaths for
-inputs/outputs should be relative to the phylogenetic directory.
 
 Modules are all [included](https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#includes)
 in the main Snakefile in the order that they are expected to run.

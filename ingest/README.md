@@ -12,7 +12,7 @@ Otherwise, make sure you have the latest set up with:
 
 ```bash
 nextstrain update nipah
-```	```
+```
 
 Run the ingest workflow with:
 
@@ -87,9 +87,6 @@ options to override these default values.
 
 The rules directory contains separate Snakefiles (`*.smk`) as modules of the core ingest workflow.
 The modules of the workflow are in separate files to keep the main ingest [Snakefile](Snakefile) succinct and organized.
-
-The `workdir` is hardcoded to be the ingest directory so all filepaths for
-inputs/outputs should be relative to the ingest directory.
 
 Modules are all [included](https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#includes)
 in the main Snakefile in the order that they are expected to run.
