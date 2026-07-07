@@ -30,6 +30,8 @@ rule download_lat_longs:
         "results/lat_longs.tsv",
     params:
         url="https://raw.githubusercontent.com/nextstrain/ncov/master/defaults/lat_longs.tsv",
+    # Allow retries in case of network errors
+    retries: 5
     log:
         "logs/download_lat_longs.txt"
     benchmark:
@@ -38,7 +40,7 @@ rule download_lat_longs:
         r"""
         exec &> >(tee {log:q})
 
-        curl {params.url:q} | \
+        curl -fsSL {params.url:q} | \
         sed "s/North Rhine Westphalia/North Rhine-Westphalia/g" | \
         sed "s/Baden-Wuerttemberg/Baden-Wurttemberg/g" \
         > {output:q}
